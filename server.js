@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var httpServer = require('http'),
-		app				 = require('./src/server/app');
+		app				 = require('./app');
 
 var port = app.get('port');
 
