@@ -74,7 +74,7 @@ gulp.task('browserify', ['views'], function() {
 
 // This task is used for building production ready
 // minified JS/CSS files into the dist/ folder
-gulp.task('build', ['html', 'browserify'], function() {
+gulp.task('build', ['html', 'browserify', 'minify-css'], function() {
   var html = gulp.src("build/index.html")
                  .pipe(htmlmin({collapseWhitespace: true}))
                  .pipe(gulp.dest('./dist/'));
