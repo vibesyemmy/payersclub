@@ -9,7 +9,7 @@ function AppConfig($httpProvider, $stateProvider, $locationProvider, $urlRouterP
     If you don't want hashbang routing, uncomment this line.
     Our tutorial will be using hashbang routing though :)
   */
-  $locationProvider.html5Mode(true);
+  // $locationProvider.html5Mode(true);
 
   $stateProvider
   .state('app', {
