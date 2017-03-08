@@ -5,22 +5,24 @@
    */
   apps : [
 
-    // First application
     {
-      name      : "API",
-      script    : "app.js",
+      name      : "FxChange",
+      script    : "server.js",
       env: {
         COMMON_VARIABLE: "true"
       },
       env_production : {
-        NODE_ENV: "production"
+        NODE_ENV:             "production",
+        APP_ID:               "9o87s1WOIyPgoTEGv0PSp9GXT1En9cwC",
+        DOMAIN_NAME:          "schoolpop.ng",
+        MAILGUN_API_KEY:      "key-9vmhz-shoqd2qm8votyipmtnh-m9xjg6",
+        MASTER_KEY:           "2h7bu8iPlLZ43Vt80rB97X2CDFmY087P",
+        PAPERTRAIL_API_TOKEN: "Q9HYll1BKt87CnJYvNj",
+        PARSE_MOUNT:          "/1",
+        PARSE_SERVER_URI:     "https://fxchange.club",
+        PUB_SERVER_URL:       "https://fxchange.club",
+        PORT:                 "3030"
       }
-    },
-
-    // Second application
-    {
-      name      : "WEB",
-      script    : "web.js"
     }
   ],
 
@@ -30,12 +32,12 @@
    */
   deploy : {
     production : {
-      user : "node",
-      host : "212.83.163.1",
+      user : "root",
+      host : "45.63.8.140",
       ref  : "origin/master",
-      repo : "git@github.com:repo.git",
-      path : "/var/www/production",
-      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production"
+      repo : "git@github.com:CodeHaven9ja/payersclub.git",
+      path : "/home/dev/node/production/fxc",
+      "post-deploy" : "npm i -g gulp && npm install && gulp build && pm2 startOrRestart ecosystem.json --env production"
     },
     dev : {
       user : "node",

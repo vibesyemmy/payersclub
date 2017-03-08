@@ -77,18 +77,18 @@ gulp.task('browserify', ['views'], function() {
 gulp.task('build', ['html', 'browserify'], function() {
   var html = gulp.src("build/index.html")
                  .pipe(htmlmin({collapseWhitespace: true}))
-                 .pipe(gulp.dest('./client/'));
+                 .pipe(gulp.dest('./dist/'));
 
   var js = gulp.src("build/main.js")
                .pipe(uglify())
-               .pipe(gulp.dest('./client/'));
+               .pipe(gulp.dest('./dist/'));
 
-  var css = gulp.src("build/vendor.css")
-                .pipe(gulp.dest('./client'));
-  var fonts = gulp.src('build/fonts')
-		              .pipe(gulp.dest('./client/fonts'));
+  var css = gulp.src("build/vendor.min.css")
+                .pipe(gulp.dest('./dist'));
+  var img = gulp.src('build/img/**/*')
+		              .pipe(gulp.dest('./dist/img'));
 
-  return merge(html,js, css, fonts);
+  return merge(html,js, css, img);
 });
 
 gulp.task('default', ['html', 'browserify', 'minify-css'], function() {
