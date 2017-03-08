@@ -14,7 +14,7 @@
       env_production : {
         NODE_ENV:             "production",
         APP_ID:               "9o87s1WOIyPgoTEGv0PSp9GXT1En9cwC",
-        DOMAIN_NAME:          "schoolpop.ng",
+        DOMAIN_NAME:          "fxchange.club",
         MAILGUN_API_KEY:      "key-9vmhz-shoqd2qm8votyipmtnh-m9xjg6",
         MASTER_KEY:           "2h7bu8iPlLZ43Vt80rB97X2CDFmY087P",
         PAPERTRAIL_API_TOKEN: "Q9HYll1BKt87CnJYvNj",
