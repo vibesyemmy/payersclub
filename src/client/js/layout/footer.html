@@ -1,0 +1,44 @@
+<footer>
+  <div class="footer-nav">
+    <div class="container">
+      <div class="row">
+        <div class="col s12 m3 hide-on-small-only">
+          <p ng-bind="::$ctrl.appName | uppercase"></p>
+          <ul>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms of service</a></li>
+          </ul>
+        </div>
+        <div class="col s12 m3 hide-on-small-only">
+					<p>COMPANY</p>
+						<ul>
+							<li><a href="/product">Product</a></li>
+							<li><a href="/blueprints">Blueprints</a></li>
+							<li><a href="/team">Team</a></li>
+							<li><a href="/partners">Partners</a></li>
+							<li><a class="modal-trigger" href="#modal1" target="_blank">Contact Us</a></li>
+						</ul>
+				</div>
+        <div class="col s12 m3">
+					<p>PLATFORM</p>
+						<ul>
+							<li><a href="http://docs.stamplay.com" target="_blank">Docs</a></li>
+							<li><a href="https://blog.stamplay.com/" target="_blank">Blog</a></li>
+							<li><a href="/pricing">Pricing</a></li>							
+							<li><a href="https://slackinvites.stamplayapp.com" target="_blank">Join us on Slack</a></li>
+						</ul>
+				</div>
+        <div class="col s12 m3">
+					<p>
+						<a href="https://facebook.com/stamplay" target="_blank" style="margin-right:5px;"><i class="fa fa-facebook fa-lg"></i>
+						</a><a href="https://twitter.com/stamplay" target="_blank" style="margin-right:5px;"><i class="fa fa-twitter fa-lg"></i></a>
+					</p>
+				</div>
+      </div>
+      <span class="attribution">
+        &copy; {{::$ctrl.date | date:'yyyy'}}.
+        Made with  <i class="ion-heart"></i> by <a href="http://glassstones.net" target="_blank">Glassstones Solutions</a>.
+      </span>
+    </div>
+  </div>
+</footer>

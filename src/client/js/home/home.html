@@ -1,0 +1,28 @@
+<home-comp show-authed="false"></home-comp>
+<div class="home-page" show-authed="true">
+  <!-- Splash banner that only shows when not logged in -->
+  <section id="splash-blue" class="z-depth-1" show-authed="false">
+    <div class="container">
+      <div class="row hide-on-small-only">
+        <div class="col m6 s12 l6">
+          <h1 class="white-text main-title" ng-bind="::$ctrl.appName | lowercase"></h1>
+          <h5 class="white-text">Easiest way to buy and sell Bitcoins</h5>
+          <div class="row">
+            <div class="col m4">
+              <a ui-sref="app.register" class="btn waves-effect waves-light yellow darken-2 segment-track-link">
+                <span class="dark-grey-text">
+                  Register
+                </span>
+              </a>
+            </div>
+            <div class="col m3 s12">
+              <a ui-sref="app.faq" class="btn waves-effect waves-light grey darken-2 modal-trigger">
+                <span class="white-text">FAQ</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
