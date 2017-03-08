@@ -26,7 +26,7 @@ function AppConfig($httpProvider, $stateProvider, $locationProvider, $urlRouterP
     title: '?'
   });
 
-  $urlRouterProvider.otherwise('/404');
+  $urlRouterProvider.otherwise('/');
 
 }
 export default AppConfig;
