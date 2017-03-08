@@ -37,8 +37,7 @@
       ref  : "origin/master",
       repo : "git@github.com:CodeHaven9ja/payersclub.git",
       path : "/home/dev/node/production/fxc",
-      "post-deploy" : "npm i -g gulp && npm install && gulp build && pm2 startOrRestart ecosystem.json --env production",
-      ssh_potions: "-i /root/.ssh/id_rsa_2"
+      "post-deploy" : "npm install && gulp build && pm2 startOrRestart ecosystem.json --env production"
     },
     dev : {
       user : "node",
