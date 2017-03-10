@@ -21,7 +21,7 @@
         PARSE_MOUNT:          "/1",
         PARSE_SERVER_URI:     "https://fxchange.club",
         PUB_SERVER_URL:       "https://fxchange.club",
-        PORT:                 "3030"
+        PORT:                 "3070"
       }
     }
   ],
