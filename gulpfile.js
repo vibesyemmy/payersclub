@@ -13,6 +13,8 @@ var concat        	= require('gulp-concat');
 var cleanCSS      	= require('gulp-clean-css');
 var merge         	= require('merge-stream');
 var htmlmin         = require('gulp-htmlmin');
+var nodemon         = require('gulp-nodemon');
+var run             = require('gulp-run');
 
 // Where our files are located
 var jsFiles   			= "src/client/js/**/*.js";
@@ -48,7 +50,7 @@ gulp.task('minify-css',['img'], function() {
 gulp.task('img', function(){
   return gulp.src('src/client/img/**/*')
     .pipe(gulp.dest('./build/img'));
-})
+});
 
 gulp.task('views', function() {
   return gulp.src(viewFiles)
@@ -70,6 +72,16 @@ gulp.task('browserify', ['views'], function() {
     .pipe(source('main.js'))
     // Start piping stream to tasks!
     .pipe(gulp.dest('./build/'));
+});
+
+gulp.task('start', ['build'] , function () {
+  nodemon({
+    script: 'server.js',
+    ignore: ['node_modules/', 'build/', 'dist/'],
+    task: ['build'],
+    ext: 'js html', 
+    env: { 'NODE_ENV': 'development' }
+  });
 });
 
 // This task is used for building production ready

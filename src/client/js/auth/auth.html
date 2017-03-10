@@ -1,4 +1,4 @@
-<div class="auth-page">
+<section class="home-page">
   <div class="container page">
     <div class="row">
 
@@ -45,10 +45,35 @@
             </fieldset>
 
             <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
+              <input 
+                type="text" 
+                class="form-control form-control-lg"
+                placeholder="Phone Number"
+                ng-model="$ctrl.formData.phone"
+                ng-required="true">
+            </fieldset>
+
+            <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
               <input class="form-control form-control-lg"
                 type="text"
-                placeholder="Wallet Address"
-                ng-model="$ctrl.formData.btc_address"
+                placeholder="Bank Name"
+                ng-model="$ctrl.formData.bk_name"
+                ng-required="true" />
+            </fieldset>
+
+            <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
+              <input class="form-control form-control-lg"
+                type="text"
+                placeholder="Account Name"
+                ng-model="$ctrl.formData.bkaccount_name"
+                ng-required="true" />
+            </fieldset>
+
+            <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
+              <input class="form-control form-control-lg"
+                type="text"
+                placeholder="Account Number"
+                ng-model="$ctrl.formData.bkaccount_number"
                 ng-required="true" />
             </fieldset>
 

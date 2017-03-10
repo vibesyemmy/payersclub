@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 function Header() {
 	'ngInject';
 	return {
@@ -9,7 +10,7 @@ function Header() {
         }
     	});
 		}
-	}
+	};
 }
 
 export default Header;

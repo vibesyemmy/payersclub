@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 function AppRun(AppConstants, $rootScope, Token, User, $state) {
   'ngInject';
 
@@ -16,8 +17,7 @@ function AppRun(AppConstants, $rootScope, Token, User, $state) {
     $state.go('app.404');
   });
 
-  $rootScope.$on('$stateChangeStart', function(e, toState  , toParams
-                                                   , fromState, fromParams) {
+  $rootScope.$on('$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) {
       $rootScope.stateLoading = true;
       var isLogin     = toState.name === "app.login";
       var isRegister  = toState.name === "app.register";

@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 class AuthCtrl {
   constructor(User, $state) {
     'ngInject';
@@ -17,10 +18,11 @@ class AuthCtrl {
         this._$state.go('app.home');
       },
       (err) => {
+        console.log(err);
         this.isSubmitting = false;
         this.errors = err.data.errors;
       }
-    )
+    );
   }
 }
 

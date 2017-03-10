@@ -1,4 +1,4 @@
-<nav id="mainNav" class="navbar navbar-default navbar-fixed-top" header-slide>
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -13,16 +13,14 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right" show-authed="false">
         <li>
-            <a class="page-scroll" href="#about">About</a>
+          <a class="page-scroll" ui-sref-active="active" ui-sref="app.login">Login</a>  
         </li>
-        <li>
-            <a class="page-scroll" href="#services">Services</a>
-        </li>
-        <li>
-            <a class="page-scroll" href="#portfolio">Portfolio</a>
-        </li>
-        <li>
-            <a class="page-scroll" href="#contact">Contact</a>
+        <li class="nav-item">
+          <a class="nav-link"
+            ui-sref-active="active"
+            ui-sref="app.register">
+            Sign up
+          </a>
         </li>
       </ul>
 
@@ -69,3 +67,4 @@
   </div>
   <!-- /.container-fluid -->
 </nav>
+
