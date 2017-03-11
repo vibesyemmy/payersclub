@@ -164,9 +164,6 @@ header {
   color: white;
 }
 
-header.main {
-  background-image: url('../img/5069.jpg');
-}
 
 header .header-content {
   position: relative;
