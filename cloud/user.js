@@ -109,9 +109,10 @@ function createTextEmail(user) {
 	text += "Take a step in achieving your dreams. Feel free to contact us and ensure to like us on Facebook so as to get updated with new developments on FXCHANGE CLUB. \n \n";
 	text += "Regards, \n";
 	text += "TEAM FXCHANGE CLUB \n";
-	text += "NOTE:  In this platform hit and run is curtailed, you either hit and stay or hit but while running away, you leave something behind for other members. \n";
-	text += "support@FXCHANGE CLUB \n";
-	text += "https://facebook.com/fxchangeclub \n";
+	text += "NOTE:  In this platform, recycling is the cornerstone, thus, hit and run is clipped, you either hit and stay or hit but while running away, you leave something behind for other members. \n";
+	text += "Endeavour to invite friends and family with this link https://fxchange.club/ref?ref="+user.get("objectId")+"\n";
+	text += "support@fxchange.club\n";
+	text += "https://facebook.com/fxchangeclub \n";
 	text += "FXCHANGE CLUB copyright 2017";
 
 	return text;
@@ -126,7 +127,8 @@ function createHTMLEmail(user) {
 	html += "<p>Regards,</p>";
 	html += "<p><b>TEAM FXCHANGE CLUB</b></p>";
 	html += "<br/>";
-	html += "<p><b>NOTE:</b>  In this platform hit and run is curtailed, you either hit and stay or hit but while running away, you leave something behind for other members.</p>";
+	html += "<p><b>NOTE:</b> In this platform, recycling is the cornerstone, thus, hit and run is clipped, you either hit and stay or hit but while running away, you leave something behind for other members.</p>";
+	html += "<p>Endeavour to invite friends and family with this <a href=\"https://fxchange.club/ref?ref="+user.get("objectId")+"\">link</a></p>";
 	html += "<p><a mailto=\"fxchange.club@gmail.com\">support@fxchange.club</a> </p>";
 	html += "<p><a href=\"https://facebook.com/fxchangeclub\">https://facebook.com/fxchangeclub</a></p>";
 	html += "<p><b>FXCHANGE CLUB</b> copyright 2017</p>";

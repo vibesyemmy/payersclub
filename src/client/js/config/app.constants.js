@@ -4,7 +4,8 @@ const AppConstants = {
   jwtKey: 'jwtToken',
   appName: 'FxChange Club',
   appId: '9o87s1WOIyPgoTEGv0PSp9GXT1En9cwC',
-  sessionToken: "sessionToken"
+  sessionToken: "sessionToken",
+  ref: "referral"
 };
 
 export default AppConstants;

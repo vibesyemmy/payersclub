@@ -12,4 +12,7 @@ servicesModule.service('Token', TokenService);
 import UserService from './user.service';
 servicesModule.service('User', UserService);
 
+import Referral from './referral.service';
+servicesModule.service('Referral', Referral);
+
 export default servicesModule;

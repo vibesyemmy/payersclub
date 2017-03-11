@@ -7,6 +7,8 @@ var ParseServer = require('parse-server').ParseServer;
 var mountPath = process.env.PARSE_MOUNT || '/1';
 var port = app.get('port');
 
+var h = require('./service/service-helper.js');
+
 var databaseUri = 'mongodb://localhost:27017/fxchangeclub';
 
 if (!databaseUri) {
@@ -38,6 +40,29 @@ var api = new ParseServer({
 });
 
 app.use(mountPath, api);
+
+app.post('/referral', (req, res) => {
+  var user = req.body;
+  var options = {
+    url: serverUri+'/users',
+    headers: {
+      'X-Parse-Application-Id': process.env.APP_ID || '9o87s1WOIyPgoTEGv0PSp9GXT1En9cwC',
+      'X-Parse-Revocable-Session': 1,
+      'Content-Type': 'application/json'
+    },
+    form: user
+  };
+
+  return h.post(options).then((s) =>{
+    res.redirect('/#!/login');
+  }).catch((err) =>{
+    res.render("register", { ref : user.ref, errors: err});
+  });
+});
+
+// app.get('/*', function(req, res){
+//     res.sendFile(__dirname + '/dist/index.html');
+// });
 
 
 httpServer.createServer(app).listen(port, () => {});
