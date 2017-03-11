@@ -5,11 +5,11 @@ Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 	var Pairing = Parse.Object.extend("Pairing"); 
 	var user = req.object;
 	var mailOptions = {
-    from: '"FxChange Admin" <fxchange.club@gmail.com>', // sender address
+    from: '"FxChange Admin" <no-reply@fxchange.club>', // sender address
     // to: user.get("email"), // list of receivers
     subject: 'Welcome ✔', // Subject line
-    text: 'Hello world ?', // plain text body
-    html: '<b>Hello world ?</b>' // html body
+    text: createTextEmail(user), // plain text body
+    html: createHTMLEmail(user) // html body
 	};
 	if (!user.existed()) {
 		user.set("isPaired", false);
@@ -97,4 +97,37 @@ Parse.Cloud.job('purgeInactive', (req, stat) =>{
 function sendEmail(user, opts) {
 	opts.to = user.get("email");
 	return client.send(opts);
+}
+
+function createTextEmail(user) {
+	var text = "Hello, "+user.get("username")+"\n";
+	text += "Thank you for your interest in becoming a member of FXCHANGE CLUB. We are pleased to welcome you into our community. We assure you that your decision to be part of us, is one you will always live to celebrate. \n";
+	text += "FXCHANGE CLUB is not just an added number to the already existing donation platforms, rather we are here with an ideology that is resilient and represents who we are and what we stand for. \n";
+	text += "FXCHANGE CLUB peer to peer donation platform have improved on the flaws of other platforms. In other words, our principle, ideology and structure is one that will withstand the deluge of challenges that has led to the cessation of other platforms. \n";
+	text += "Take a step in achieving your dreams. Feel free to contact us and ensure to like us on Facebook so as to get updated with new developments on FXCHANGE CLUB. \n \n";
+	text += "Regards, \n";
+	text += "TEAM FXCHANGE CLUB \n";
+	text += "NOTE:  In this platform hit and run is curtailed, you either hit and stay or hit but while running away, you leave something behind for other members. \n";
+	text += "support@FXCHANGE CLUB \n";
+	text += "https://facebook.com/fxchangeclub \n";
+	text += "FXCHANGE CLUB copyright 2017";
+
+	return text;
+}
+
+function createHTMLEmail(user) {
+	var html = "<p>Hello, <b>"+user.get("username")+"</b></p>";
+	html += "<p>Thank you for your interest in becoming a member of <b>FXCHANGE CLUB</b>. We are pleased to welcome you into our community. We assure you that your decision to be part of us, is one you will always live to celebrate.</p>";
+	html += "<p><b>FXCHANGE CLUB</b> is not just an added number to the already existing donation platforms, rather we are here with an ideology that is resilient and represents who we are and what we stand for.</p>";
+	html += "<p><b>FXCHANGE CLUB</b> peer to peer donation platform have improved on the flaws of other platforms. In other words, our principle, ideology and structure is one that will withstand the deluge of challenges that has led to the cessation of other platforms.</p>";
+	html += "<p>Take a step in achieving your dreams. Feel free to contact us and ensure to like us on Facebook so as to get updated with new developments on FXCHANGE CLUB.</p>";
+	html += "<p>Regards,</p>";
+	html += "<p><b>TEAM FXCHANGE CLUB</b></p>";
+	html += "<br/>";
+	html += "<p><b>NOTE:</b>  In this platform hit and run is curtailed, you either hit and stay or hit but while running away, you leave something behind for other members.</p>";
+	html += "<p><a mailto=\"fxchange.club@gmail.com\">support@fxchange.club</a> </p>";
+	html += "<p><a href=\"https://facebook.com/fxchangeclub\">https://facebook.com/fxchangeclub</a></p>";
+	html += "<p><b>FXCHANGE CLUB</b> copyright 2017</p>";
+
+	return html;
 }

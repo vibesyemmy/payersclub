@@ -5,6 +5,7 @@ var ParseServer = require('parse-server').ParseServer;
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/1';
+var port = app.get('port');
 
 var serverUri;
 if (process.env.PARSE_SERVER_URI) {
@@ -32,6 +33,5 @@ var api = new ParseServer({
 
 app.use(mountPath, api);
 
-var port = app.get('port');
 
 httpServer.createServer(app).listen(port, () => {});
