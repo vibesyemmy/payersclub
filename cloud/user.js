@@ -96,7 +96,9 @@ Parse.Cloud.job('purgeInactive', (req, stat) =>{
 
 function sendEmail(user, opts) {
 	opts.to = user.get("email");
-	return client.send(opts);
+	return client.send(opts).then((info) =>{
+		return;
+	});
 }
 
 function createTextEmail(user) {
