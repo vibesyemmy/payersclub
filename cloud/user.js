@@ -138,7 +138,7 @@ function createHTMLEmail(user) {
 	html += "<p><b>TEAM FXCHANGE CLUB</b></p>";
 	html += "<br/>";
 	html += "<p><b>NOTE:</b> In this platform, recycling is the cornerstone, thus, hit and run is clipped, you either hit and stay or hit but while running away, you leave something behind for other members.</p>";
-	html += "<p>Endeavour to invite friends and family with this <a href=\"https://fxchange.club/referral?ref="+user.id+"\">link</a></p>";
+	html += "<p>Endeavour to invite friends and family with this https://fxchange.club/referral?ref="+user.id+"</p>";
 	html += "<p><a mailto=\"fxchange.club@gmail.com\">support@fxchange.club</a> </p>";
 	html += "<p><a href=\"https://facebook.com/fxchangeclub\">https://facebook.com/fxchangeclub</a></p>";
 	html += "<p><b>FXCHANGE CLUB</b> copyright 2017</p>";
