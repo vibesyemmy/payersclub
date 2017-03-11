@@ -54,11 +54,38 @@
             </fieldset>
 
             <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
-              <input class="form-control form-control-lg"
-                type="text"
-                placeholder="Bank Name"
-                ng-model="$ctrl.formData.bk_name"
-                ng-required="true" />
+              <label for="plan">Choose plan</label>
+              <select name="plan" ng-mode="$ctrl.plan" class="form-control">
+                <option value="1">Starter - &#8358;10,000</option>
+                <option value="2">Basic - &#8358;20,000</option>
+                <option value="3">Ultima - &#8358;50,000</option>
+                <option value="4">VIP - &#8358;100,000</option>
+              </select>
+            </fieldset>
+
+            <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
+              <label for="bk_name">Choose Bank</label>
+              <select name="bk_name" class="form-control" ng-model="$ctrl.formData.bk_name">
+                <option value="access bank">Access Bank</option>
+                <option value="afri bank">Afri Bank</option>
+                <option value="citi bank">Citi Bank</option>
+                <option value="diamond bank">Diamond Bank</option>
+                <option value="eco bank">Eco Bank</option>
+                <option value="fcmb">FCMB</option>
+                <option value="fidelity bank">Fidelity Bank</option>
+                <option value="first bank of nigeria">First Bank of Nigeria</option>
+                <option value="gtb">GTB</option>
+                <option value="heritage bank">Heritage Bank</option>
+                <option value="skye bank">Skye Bank</option>
+                <option value="stanbic ibtc bank">Stanbic IBTC Bank</option>
+                <option value="standard chartered bank">Standard Chartered Bank</option>
+                <option value="sterling bank">Sterling Bank</option>
+                <option value="uba">UBA</option>
+                <option value="union bank">Union Bank</option>
+                <option value="unity bank">Unity Bank</option>
+                <option value="wema bank">WEMA Bank</option>
+                <option value="zenith bank">Zenith Bank</option>
+              </select>
             </fieldset>
 
             <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
@@ -71,7 +98,7 @@
 
             <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
               <input class="form-control form-control-lg"
-                type="text"
+                type="number"
                 placeholder="Account Number"
                 ng-model="$ctrl.formData.bkaccount_number"
                 ng-required="true" />

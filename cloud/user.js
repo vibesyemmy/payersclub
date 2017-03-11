@@ -27,6 +27,7 @@ Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 			// Create pairings for donors
 			var pairing = new Pairing();
 			pairing.set("to", u); 
+			pairing.set("plan", u.get("plan"));
 			pairing.set("eligible", false);
 			return pairing.save(null,{useMasterKey: true});
 		}).then((p) =>{

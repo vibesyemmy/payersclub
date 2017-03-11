@@ -13,7 +13,7 @@ class AuthCtrl {
 
   submitForm() {
     this.isSubmitting = true;
-    this._User.attemptAuth(this.authType, this.formData).then(
+    this._User.attemptAuth(this.authType, this.formData, this.plan).then(
       (res) => {
         this._$state.go('app.home');
       },
