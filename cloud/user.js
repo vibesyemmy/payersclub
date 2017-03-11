@@ -1,6 +1,15 @@
 /*jshint esversion: 6 */
 var client = require(__dirname + '/modules/nodemailer.js');
 
+Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
+	var user = req.object;
+	var pUsername = user.get("username");
+	user.set("username", pUsername.toLowerCase());
+	user.set("pUsername", pUsername);
+
+	res.success();
+})
+
 Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 	var Pairing = Parse.Object.extend("Pairing"); 
 	var user = req.object;
