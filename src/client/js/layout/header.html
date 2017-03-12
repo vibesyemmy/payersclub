@@ -51,14 +51,16 @@
           </a>
         </li>
 
-        <li>
+        <!-- <li>
           <a
             ui-sref-active="active"
             ui-sref="app.profile.main({ username: $ctrl.currentUser.username})">
             <img ng-src="{{$ctrl.currentUser.image}}" class="user-pic" />
             {{ $ctrl.currentUser.username }}
           </a>
-        </li>
+        </li> -->
+
+        <li><a ng-click="$ctrl.logout()">Logout</a></li>
 
       </ul>
 
