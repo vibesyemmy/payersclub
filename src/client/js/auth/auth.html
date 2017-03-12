@@ -55,7 +55,7 @@
 
             <fieldset class="form-group" ng-if="$ctrl.authType === 'register'">
               <label for="plan">Choose plan</label>
-              <select name="plan" ng-mode="$ctrl.plan" class="form-control" required>
+              <select name="plan" ng-mode="$ctrl.formData.plan" class="form-control" required>
                 <option value="">---Please select plan---</option>
                 <option value="1">Starter - &#8358;10,000</option>
                 <option value="2">Basic - &#8358;20,000</option>
