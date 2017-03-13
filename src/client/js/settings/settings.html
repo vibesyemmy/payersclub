@@ -1,0 +1,99 @@
+<section class="settings-page">
+  <div class="container page">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 col-xs-12">
+
+        <h1 class="text-xs-center">Your Settings</h1>
+
+        <list-errors errors="$ctrl.errors"></list-errors>
+
+        <form ng-submit="$ctrl.submitForm()">
+          <fieldset ng-disabled="$ctrl.isSubmitting">
+
+            <fieldset class="form-group">
+              <input class="form-control form-control-lg"
+                type="email"
+                placeholder="Email"
+                ng-model="$ctrl.formData.email" />
+            </fieldset>
+
+            <fieldset class="form-group">
+              <input class="form-control form-control-lg"
+                type="password"
+                placeholder="New Password"
+                ng-model="$ctrl.formData.password" />
+            </fieldset>
+
+            <hr />
+
+            <fieldset class="form-group">
+              <input 
+                type="text" 
+                class="form-control form-control-lg"
+                placeholder="Phone Number"
+                ng-model="$ctrl.formData.phone"
+                ng-required="true">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="bk_name">Choose Bank</label>
+              <select name="bk_name" class="form-control" ng-model="$ctrl.formData.bk_name" required>
+                <option value="">---Please select bank---</option>
+                <option value="access bank">Access Bank</option>
+                <option value="afri bank">Afri Bank</option>
+                <option value="citi bank">Citi Bank</option>
+                <option value="diamond bank">Diamond Bank</option>
+                <option value="eco bank">Eco Bank</option>
+                <option value="fcmb">FCMB</option>
+                <option value="fidelity bank">Fidelity Bank</option>
+                <option value="first bank of nigeria">First Bank of Nigeria</option>
+                <option value="gtb">GTB</option>
+                <option value="heritage bank">Heritage Bank</option>
+                <option value="skye bank">Skye Bank</option>
+                <option value="stanbic ibtc bank">Stanbic IBTC Bank</option>
+                <option value="standard chartered bank">Standard Chartered Bank</option>
+                <option value="sterling bank">Sterling Bank</option>
+                <option value="uba">UBA</option>
+                <option value="union bank">Union Bank</option>
+                <option value="unity bank">Unity Bank</option>
+                <option value="wema bank">WEMA Bank</option>
+                <option value="zenith bank">Zenith Bank</option>
+              </select>
+            </fieldset>
+
+            <fieldset class="form-group">
+              <input class="form-control form-control-lg"
+                type="text"
+                placeholder="Account Name"
+                ng-model="$ctrl.formData.bkaccount_name"
+                ng-required="true" />
+            </fieldset>
+
+            <fieldset class="form-group">
+              <input class="form-control form-control-lg"
+                type="text"
+                placeholder="Account Number"
+                ng-model="$ctrl.formData.bkaccount_number"
+                ng-required="true" />
+            </fieldset>
+
+            <button class="btn btn-lg btn-primary pull-xs-right"
+              type="submit">
+              Update Settings
+            </button>
+
+          </fieldset>
+        </form>
+
+        <!-- Line break for logout button -->
+        <hr />
+
+        <button class="btn btn-outline-danger"
+          ng-click="$ctrl.logout()">
+          Or click here to logout.
+        </button>
+
+      </div>
+    </div>
+  </div>
+</section>

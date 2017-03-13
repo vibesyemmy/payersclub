@@ -63,9 +63,12 @@ class User {
 
   update(fields) {
     return this._$http({
-      url:  this._AppConstants.api + '/user',
+      url:  this._AppConstants.api + '/classes/_User/'+this.current.objectId,
       method: 'PUT',
-      data: { user: fields }
+      headers:{
+        'X-Parse-Application-Id': this._AppConstants.appId
+      },
+      data: fields
     }).then(
       (res) => {
         this.current = res.data;
