@@ -12,5 +12,8 @@ homeModule.config(HomeConfig);
 import HomeCtrl from './home.controller';
 homeModule.controller('HomeCtrl', HomeCtrl);
 
+import DashCtrl from './dashboard.controller';
+homeModule.controller('DashCtrl', DashCtrl);
+
 
 export default homeModule;

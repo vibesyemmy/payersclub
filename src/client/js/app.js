@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-ui-router';
 import 'angular-ui-bootstrap';
+import 'angular-gravatar';
 
 // Import our app config files
 import constants  from './config/app.constants';
@@ -21,6 +22,7 @@ import './services';
 const requires = [
 	'ui.router',
 	'ui.bootstrap',
+	'ui.gravatar',
   'templates',
   'app.services',
   'app.layout',
