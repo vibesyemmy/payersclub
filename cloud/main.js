@@ -15,4 +15,20 @@ Parse.Cloud.define('test', (req, res) => {
 	}).catch((err) => {
 		return res.error(err);
 	});
+});
+
+Parse.Cloud.define('mail', (req, res) =>{
+	var m = req.params;
+	var mailOptions = {
+    from: '"FxChange Admin" <support@fxchange.club>', // sender address
+    to: m.to, // list of receivers
+    subject: m.subject, // Subject line
+    text: m.text, // plain text body
+    html: m.html // html body
+	};
+	return client.send(mailOptions).then((info) =>{
+		return res.success(info);
+	}).catch((err) => {
+		return res.error(err);
+	});
 })
