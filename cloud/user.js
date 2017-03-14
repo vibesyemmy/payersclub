@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+var _ = require("underscore");
+
 var client = require(__dirname + '/modules/nodemailer.js');
 
 Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
@@ -60,6 +62,11 @@ Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 
 		 	return mainQuery.first();
 		}).then((p) =>{
+			var env = process.env.NODE_ENV || "dev";
+			if (env === "dev") {
+				return res.success();
+			}
+			
 			if (!p) {
 				return sendEmail(user, mailOptions);
 			}
@@ -72,6 +79,7 @@ Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 				return sendEmail(user, mailOptions);
 			} 
 			p.set("p3", user);
+
 			return sendEmail(user, mailOptions);
 		}).then((info) =>{
 			return res.success(info);
@@ -83,15 +91,15 @@ Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 
 Parse.Cloud.job('purgeInactive', (req, stat) =>{
 	// the params passed through the start request
-  var params = request.params;
+  var params = req.params;
   // Headers from the request that triggered the job
-  var headers = request.headers;
+  var headers = req.headers;
 
   // get the parse-server logger
-  var log = request.log;
+  var log = req.log;
 
   // Update the Job status message
-  status.message("I just started");
+  stat.message("I just started");
 
   // doSomethingVeryLong().then(function(result) {
   //   // Mark the job as successful
@@ -102,7 +110,9 @@ Parse.Cloud.job('purgeInactive', (req, stat) =>{
   //   status.error("There was an error");
   // })
 
-})
+});
+
+
 
 function sendEmail(user, opts) {
 	opts.to = user.get("email");

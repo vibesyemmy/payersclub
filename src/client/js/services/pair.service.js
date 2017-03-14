@@ -8,6 +8,8 @@ class Pair {
 		this._$http = $http;
 		this._user = User.current;
     this._AppConstants = AppConstants;
+    this.ph = null;
+    this.gh = null;
 	}
 
 	getStarter(){
@@ -42,6 +44,7 @@ class Pair {
       	limit: 1
       }
 		}).then((res) =>{
+			this.gh = res.data.results[0];
 			return res.data.results[0];
 		}).catch((err) =>{
 			return err;
@@ -64,6 +67,7 @@ class Pair {
       	limit: 1
       }
 		}).then((res) =>{
+			this.ph = res.data.results[0]; 
 			return res.data.results[0];
 		}).catch((err) =>{
 			return err;

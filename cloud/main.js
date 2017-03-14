@@ -1,4 +1,6 @@
 require(__dirname + '/user.js');
+require(__dirname + '/pair.js');
+require(__dirname + '/jobs.js');
 var client = require(__dirname + '/modules/nodemailer.js');
 
 Parse.Cloud.define('test', (req, res) => {
