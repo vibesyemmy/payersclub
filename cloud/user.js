@@ -125,6 +125,7 @@ function createTextEmail(user) {
 	text += "support@fxchange.club\n";
 	text += "https://facebook.com/fxchangeclub \n";
 	text += "FXCHANGE CLUB copyright 2017";
+	text += "Follow this link to join our WhatsApp group: https://chat.whatsapp.com/ECufYC9rdEG1jATrMTELXP";
 
 	return text;
 }
@@ -144,6 +145,7 @@ function createHTMLEmail(user) {
 	html += "<p><a mailto=\"fxchange.club@gmail.com\">support@fxchange.club</a> </p>";
 	html += "<p><a href=\"https://facebook.com/fxchangeclub\">https://facebook.com/fxchangeclub</a></p>";
 	html += "<p><b>FXCHANGE CLUB</b> copyright 2017</p>";
+	html += "<p>Follow this link to join our WhatsApp group: <a href=\"https://chat.whatsapp.com/ECufYC9rdEG1jATrMTELXP\">https://chat.whatsapp.com/ECufYC9rdEG1jATrMTELXP</a><p>";
 
 	return html;
 }
