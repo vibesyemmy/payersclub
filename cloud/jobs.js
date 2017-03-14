@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 var _ = require("underscore");
+var r = require("request"); 
 
 Parse.Cloud.job('match-10k', (req, stat) =>{
   // the params passed through the start request
@@ -216,12 +217,186 @@ Parse.Cloud.job("pair", (req, stat) =>{
   var users = new Parse.Query(Parse.User);
   users.equalTo("isPaired", false);
   users.find().then((users) =>{
+    var promise       = Parse.Promise.as();
+    var innerPromise  = Parse.Promise.as();
     _.each(users, (user) =>{
-      for (var i = 0; i < 2; i++) {
-        console.log(user.get("username"));
-      }
+      promise = promise.then(() =>{
+        var ux = new Parse.Query("Pairing");
+        ux.notEqualTo("to", user);
+        ux.equalTo("plan", user.get("plan"));
+        ux.include(["to", "p1", "p2", "p3", "p4"]);
+        return ux.find().then((ps) =>{
+          _.each(ps, (pp) =>{
+            if (checkP1(user, pp)) {
+              console.log("=======================");
+              console.log("=       Save p1       =");
+              console.log("=======================");
+              pp.set("p1", user);
+            } else if (checkP2(user, pp)) {
+              console.log("=======================");
+              console.log("=       Save p2       =");
+              console.log("=======================");
+              pp.set("p2", user);
+            } else if (checkP3(user, pp)) {
+              console.log("=======================");
+              console.log("=       Save p3       =");
+              console.log("=======================");
+              pp.set("p3", user);
+            } else if (checkP4(user, pp)) {
+              console.log("=======================");
+              console.log("=       Save p4       =");
+              console.log("=======================");
+              pp.set("p4", user);
+            }
+            return pp.save(null, {useMasterKey:true})
+          });
+        });
+      });
     });
+    return promise;
+  }).then(() =>{
+    stat.success("Done");  
+  }).catch((err) =>{
+    stat.error(err);
   });
-  stat.success("Done");
 
 });
+
+Parse.Cloud.job('pair-2', (req, stat) =>{
+  var u = [];
+  var p = [];
+  var promise = [];
+
+  var users = new Parse.Query(Parse.User);
+  users.equalTo("isPaired", false);
+  users.find().then((us) =>{
+    u = us;
+    var ux = new Parse.Query("Pairing");
+    ux.include(["to", "p1", "p2", "p3", "p4"]);
+    return ux.find();
+  }).then((ps) =>{
+    var i = u.length;
+    p = ps;
+    while (i--) {
+      console.log(u[i].get("username"));
+      promise.push(pair(u[i]));
+      u.splice(i, 1);
+    };
+    return promise;
+  }).then((prs) =>{
+    var promise = Parse.Promise.as();
+    _.each(prs, (p) =>{
+      promise = promise.then(() =>{
+        p.save();
+      });
+    });
+    return promise;
+  }).then(() =>{
+    stat.success();
+  }).catch((err) =>{
+    console.log(err);
+    stat.error(err);
+  });
+});
+
+function pair(user) {
+  var p = new Parse.Query("Pairing");
+  p.notEqualTo("to", user);
+  p.notEqualTo("p1", user);
+  p.notEqualTo("p2", user);
+  p.notEqualTo("p3", user);
+  p.notEqualTo("p4", user);
+  p.equalTo("plan", user.get("plan"));
+
+  return p.first().then((px)=>{
+    if(!px.has("p1")) {
+      console.log("=======================");
+      console.log("=       Save p1       =");
+      console.log("=======================");
+      px.set("p1", user);
+    } else if(px.has("p1") && !px.has("p2")){
+      console.log("=======================");
+      console.log("=       Save p2       =");
+      console.log("=======================");
+      px.set("p2", user);
+    } else if(px.has("p1") && px.has("p2") && !px.has("p3") && user.get("isRecycled")){
+      console.log("=======================");
+      console.log("=       Save p3       =");
+      console.log("=======================");
+      px.set("p3", user);
+    } else if(px.has("p1") && px.has("p2") && px.has("p3") && !px.has("p4") && user.get("isRecycled")) {
+      console.log("=======================");
+      console.log("=       Save p4       =");
+      console.log("=======================");
+      px.set("p3", user);
+    }
+
+    return px.save();
+  });
+}
+
+Parse.Cloud.job('wipe', (req, stat) =>{
+  // Clean Users
+  var u = [];
+  var p = [];
+  var uq = new Parse.Query(Parse.User);
+  uq.limit(100);
+  var pq = new Parse.Query("Pairing");
+  uq.find().then((users) =>{
+    _.each(users, (user) =>{
+      console.log(user.get("username"));
+      user.set("isPaired", false);
+      user.unset("position");
+      user.unset("pair");
+      u.push(user.save(null, {useMasterKey:true}))
+    });
+    return Parse.Promise.when(u);
+  }).then(() =>{
+    return pq.find();
+  }).then((pairs) =>{
+    _.each(pairs, (pair) =>{
+      pair.unset("p1");
+      pair.unset("p2");
+      pair.unset("p3");
+      pair.unset("p4");
+      p.push(pair.save());
+    });
+    return Parse.Promise.when(p);
+  }).then(() =>{
+    stat.success();
+  }).catch((err) =>{
+    stat.error(err);
+  });
+});
+
+function checkP1(user, p) {
+  var isP1 = false;
+  if (!p.has("p1") || (p.has("p2") && p.get("p2").id != user.id) || (p.has("p3") && p.get("p3").id != user.id)  || (p.has("p4") && p.get("p4").id != user.id)) {
+    isP1 = true;
+  }
+  return isP1;
+}
+
+function checkP2(user, p) {
+  var isP2 = false;
+  if (!p.has("p2") || (p.has("p1") && p.get("p1").id != user.id) || (p.has("p3") && p.get("p3").id != user.id)  || (p.has("p4") && p.get("p4").id != user.id)) {
+    isP2 = true;
+  }
+  return isP2;
+}
+
+function checkP3(user, p) {
+  var isP3 = false;
+  if ((!p.has("p3") || (p.has("p1") && p.get("p1").id != user.id) || (p.has("p2") && p.get("p2").id != user.id)  || (p.has("p4") && p.get("p4").id != user.id))&& p.get("to").get("isRecycled")) {
+    isP3 = true;
+  }
+  return isP3;
+}
+
+function checkP4(user, p) {
+  var isP4 = false;
+  if ((!p.has("p4") || (p.has("p1") && p.get("p1").id != user.id) || (p.has("p2") && p.get("p2").id != user.id)  || (p.has("p3") && p.get("p3").id != user.id))&& p.get("to").get("isRecycled")) {
+    isP4 = true;
+  }
+  return isP4;
+}
