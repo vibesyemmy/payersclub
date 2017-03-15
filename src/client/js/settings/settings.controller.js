@@ -11,7 +11,8 @@ class SettingsCtrl {
       phone: User.current.phone,
       bk_name: User.current.bk_name,
       bkaccount_name: User.current.bkaccount_name,
-      bkaccount_number: User.current.bkaccount_number
+      bkaccount_number: User.current.bkaccount_number,
+      plan:User.current.plan
     }
 
     this.logout = User.logout.bind(User);
@@ -22,7 +23,7 @@ class SettingsCtrl {
     this.isSubmitting = true;
     this._User.update(this.formData).then(
       (user) => {
-        this._$state.go('app.profile.main', {username:user.username})
+        this._$state.go('app.home')
       },
       (err) => {
         this.isSubmitting = false;

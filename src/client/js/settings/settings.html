@@ -36,6 +36,17 @@
             </fieldset>
 
             <fieldset class="form-group">
+              <label for="plan">Choose plan</label>
+              <select name="plan" ng-model="$ctrl.formData.plan" class="form-control" required>
+                <option value="">---Please select plan---</option>
+                <option value="1">Starter - &#8358;10,000</option>
+                <option value="2">Basic - &#8358;20,000</option>
+                <option value="3">Ultima - &#8358;50,000</option>
+                <option value="4">VIP - &#8358;100,000</option>
+              </select>
+            </fieldset>
+
+            <fieldset class="form-group">
               <label for="bk_name">Choose Bank</label>
               <select name="bk_name" class="form-control" ng-model="$ctrl.formData.bk_name" required>
                 <option value="">---Please select bank---</option>
