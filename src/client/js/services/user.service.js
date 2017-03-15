@@ -124,6 +124,23 @@ class User {
     });
   }
 
+  bump(user) {
+    return this._$http({
+      method: 'POST',
+      url: this._AppConstants.api + '/functions/bump',
+      headers:{
+        'X-Parse-Application-Id': this._AppConstants.appId
+      },
+      data : {
+        uid : user.objectId
+      }
+    }).then((res) =>{
+      return res.data;
+    }).catch((err) =>{
+      return err;
+    });
+  }
+
   logout() {
     this.current = null;
     this._Token.destroy();

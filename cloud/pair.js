@@ -76,6 +76,11 @@ Parse.Cloud.define('pair', (req, res) =>{
 	  p.include("to");
 	  return p.first();
 	}).then((px) =>{
+		if(!px) {
+			var Pair = Parse.Object.extend("Pairing");
+			px = new Pair();
+			px.set("to", user);
+		}
 		console.log(checkP1(user, px),checkP2(user, px),checkP3(user, px),checkP4(user, px));
 		if (checkP1(user, px)) {
 			px.set("p1", user);
@@ -92,6 +97,35 @@ Parse.Cloud.define('pair', (req, res) =>{
 	}).catch((err) =>{
 		return res.error(err);
 	})
+});
+
+Parse.Cloud.define('bump', (req, res) =>{
+	var uid = req.params.uid;
+	var user;
+
+	var u = new Parse.Query(Parse.User);
+	var p = new Parse.Query("Pairing");
+	var Pair = Parse.Object.extend("Pairing");
+	
+	u.equalTo("objectId", uid);
+	u.first().then((ux) =>{
+		user = ux;
+		p.equalTo("to", user);
+		return p.first();
+	}).then((p) =>{
+		if (!p) {
+			p = new Pair();
+			p.set("to", user);
+			p.set("plan", user.get("plan"));
+		}
+		p.set("eligible", true);
+
+		return p.save();
+	}).then((p) =>{
+		return res.success(p);
+	}).catch((err)=>{
+		return res.error(err);
+	});
 });
 
 function checkP1(user, p) {

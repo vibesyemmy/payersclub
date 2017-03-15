@@ -10,6 +10,7 @@
 					<th>plan</th>
 					<th>is paired</th>
 					<th>is recycled</th>
+					<th>Bump User</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -20,6 +21,7 @@
 					<td ng-bind="row.plan"></td>
 					<td><a ng-click="$ctrl.pair(row)" ng-bind="row.isPaired"></a></td>
 					<td ng-bind="row.isRecycled"></td>
+					<td><a ng-click="$ctrl.bump(row)">&#8593;</a></td>
 				</tr>
 				</tbody>
 				<tfoot>

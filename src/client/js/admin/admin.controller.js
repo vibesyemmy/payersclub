@@ -22,6 +22,17 @@ class AdminCtrl {
 		});
 	}
 
+	bump(user) {
+		this.rs.stateLoading = true;
+		var usr = this.filter('filter')(this.users, (d) =>{ return d.objectId === user.objectId; })[0];
+		this.userService.bump(usr).then((u) =>{
+			this.rs.stateLoading = false;
+		}).catch((err) =>{
+			this.rs.stateLoading = false;
+			console.log("Error",err);
+		});
+	}
+
 	confirm(){
 
 	}
