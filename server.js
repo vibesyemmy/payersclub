@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-var httpServer = require('http'),
-		app				 = require('./app');
+var		app				 = require('./app');
 var ParseServer = require('parse-server').ParseServer;
+var debug = require('debug')('fxchange:server');
+var env = process.env.NODE_ENV || "dev";
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/1';
@@ -36,7 +37,10 @@ var api = new ParseServer({
   serverURL: serverUri,  // Don't forget to change to https if needed
   // Enable email verification
   appName: 'FxChangeClub',
-  publicServerURL: publicServerURL
+  publicServerURL: publicServerURL,
+  liveQuery: {
+    classNames: ['_User', 'Pairing']
+  }
 });
 
 app.use(mountPath, api);
@@ -64,5 +68,94 @@ app.post('/referral', (req, res) => {
 //     res.sendFile(__dirname + '/dist/index.html');
 // });
 
+let httpServer = require('http').createServer(app);
 
-httpServer.createServer(app).listen(port, () => {});
+var io = require('socket.io').listen(httpServer);
+
+var participants = [];
+var nameCounter  = 1;
+
+io.sockets.on('connection', (s) =>{
+  
+  console.log('Connection established');
+
+  s.on('room', (room) =>{
+    console.log("Joining "+room+" room.");
+    s.join(room);
+  });
+  
+  s.on('disconnect', function () {
+    console.log("A user has disconnected");
+  });
+
+});
+
+httpServer.listen(port);
+
+
+// httpServer.createServer(app).listen(port);
+
+httpServer.on('error', onError);
+httpServer.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = httpServer.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+// var parseLiveQueryServer = ParseServer.createLiveQueryServer(httpServer);

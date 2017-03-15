@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 var _ = require("underscore");
-var r = require("request"); 
+var r = require('../service/service-helper.js');
+var env = process.env.NODE_ENV || "dev";
 
 Parse.Cloud.job('match-10k', (req, stat) =>{
   // the params passed through the start request
@@ -260,6 +261,37 @@ Parse.Cloud.job("pair", (req, stat) =>{
     stat.error(err);
   });
 
+});
+
+Parse.Cloud.job('pair-3', (req, stat) =>{
+  var users = new Parse.Query(Parse.User);
+  users.equalTo("isPaired", false);
+  users.find().then((users) =>{
+    var promise = Parse.Promise.as();
+    var url = env === "dev" ? 'http://localhost:3070/1/functions/pair' : 'https://fxchange.club/1/functions/pair';
+    _.each(users, (user) =>{
+      promise = promise.then(() =>{
+        var opt = {
+          url: url,
+          headers: {
+            'X-Parse-Application-Id': process.env.APP_ID || '9o87s1WOIyPgoTEGv0PSp9GXT1En9cwC',
+            'Content-Type': 'application/json'
+          },
+          json: {
+            uid: user.id
+          }
+        }
+        return r.post(opt);
+      })
+    });
+    return promise;
+  }).then((res) =>{
+    var pz = res;
+    console.log(res.result);
+    stat.success("Done");
+  }).catch((err) =>{
+    stat.error(err);
+  });
 });
 
 Parse.Cloud.job('pair-2', (req, stat) =>{

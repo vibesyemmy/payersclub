@@ -1,5 +1,5 @@
 class HomeCtrl {
-  constructor(Pair, User, AppConstants, $scope, $state) {
+  constructor(Pair, User, AppConstants, $scope, $state, SocketIO) {
     'ngInject';
 
     this.appName = AppConstants.appName;

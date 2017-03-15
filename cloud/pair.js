@@ -1,16 +1,16 @@
 /*jshint esversion: 6 */
 var _ = require("underscore");
 
-// Parse.Cloud.beforeSave("Pairing", (req, res)=>{
-// 	var p = req.object;
+Parse.Cloud.beforeSave("Pairing", (req, res)=>{
+	var p = req.object;
 
-// 	if (p.get("to") == p.get("p1") || p.get("to") == p.get("p2") || p.get("to") == p.get("p3") || p.get("to") == p.get("p4")) {
-// 		return res.error("Can't match to self");
-// 	}
+	if (p.get("to") == p.get("p1") || p.get("to") == p.get("p2") || p.get("to") == p.get("p3") || p.get("to") == p.get("p4")) {
+		return res.error("Can't match to self");
+	}
 
-// 	return res.success();
+	return res.success();
 
-// });
+});
 
 Parse.Cloud.afterSave("Pairing", (req, res) =>{
 	var p = req.object;

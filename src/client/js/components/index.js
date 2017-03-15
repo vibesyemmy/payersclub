@@ -29,4 +29,7 @@ componentsModule.component('getHelpCard', GH);
 import Recycle from './card/recycle.component';
 componentsModule.component('recycleCard', Recycle);
 
+import Wysiwyg from './wysiwyg5/wysiwyg.directive.js';
+componentsModule.directive('richTextEditor', Wysiwyg);
+
 export default componentsModule;

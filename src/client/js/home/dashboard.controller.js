@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 class DashCtrl{
-	constructor(ph, gh, user, $scope){
+	constructor(ph, gh, user, $scope, SocketIO){
 		'ngInject';
 
 		this.ph 			= ph;
@@ -8,8 +8,8 @@ class DashCtrl{
 		this.user			= user;
 		this._$scope 	= $scope;
 
-		console.log("Provide Help", this.ph);
-		console.log("Get Help", this.pair);
+		// console.log("Provide Help", this.ph);
+		// console.log("Get Help", this.pair);
 	}
 }
 

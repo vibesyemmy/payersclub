@@ -51,6 +51,7 @@ class Pair {
 		});
 	}
 
+
 	provideHelp(){
 		var ph = {};
 		return this._$http({
@@ -68,6 +69,48 @@ class Pair {
       }
 		}).then((res) =>{
 			this.ph = res.data.results[0]; 
+			return res.data.results[0];
+		}).catch((err) =>{
+			return err;
+		});
+	}
+
+	getGetHelp(user) {
+		return this._$http({
+			method:'GET',
+			url: this._AppConstants.api +"/classes/Pairing",
+      headers:this.header(),
+      params:{
+      	'where': {
+      		to: this.otherUser(user.objectId),
+      		eligible: true
+      	},
+      	include:['p1', 'p2', 'p3', 'p4', 'to'],
+      	order:'-createdAt',
+      	limit: 1
+      }
+		}).then((res) =>{
+			return res.data.results[0];
+		}).catch((err) =>{
+			return err;
+		});
+	}
+
+	getProvideHelp(user){
+		return this._$http({
+			method:'GET',
+			url: this._AppConstants.api +"/classes/Pairing",
+      headers:this.header(),
+      params: {
+      	where: {
+      		"$or":[{"p1":this.otherUser(user.objectId)}, {"p2": this.otherUser(user.objectId)}, {"p3":this.otherUser(user.objectId)}, {"p4":this.otherUser(user.objectId)}],
+      		"plan": user.plan
+      	},
+      	include:['to'],
+      	order:'-createdAt',
+      	limit: 1
+      }
+		}).then((res) =>{
 			return res.data.results[0];
 		}).catch((err) =>{
 			return err;
@@ -95,6 +138,14 @@ class Pair {
 			"__type": "Pointer",
       "className": "_User",
       "objectId": this._user.objectId
+		};
+	}
+
+	otherUser(id) {
+		return {
+			"__type": "Pointer",
+      "className": "_User",
+      "objectId": id
 		};
 	}
 

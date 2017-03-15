@@ -20,7 +20,7 @@
   			<div ng-if="$ctrl.pair" class="row" style="margin-top: 45px;">
 	  			<get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p1" txid="$ctrl.pair.objectId" position="p1" user="$ctrl.pair.p1" type=1 class="panel panel-info card col-md-4"></get-help-card>
 	  			
-          <get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p2" user="$ctrl.pair.p2" type=1 class="panel panel-info card col-md-4"></get-help-card>
+          <get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p2" txid="$ctrl.pair.objectId" position="p2" user="$ctrl.pair.p2" type=1 class="panel panel-info card col-md-4"></get-help-card>
   				<recycle-card class="panel panel-danger card col-md-4"></recycle-card>
   				<recycle-card class="panel panel-danger card col-md-4"></recycle-card>
   			</div>

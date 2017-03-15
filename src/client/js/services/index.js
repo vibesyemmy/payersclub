@@ -15,4 +15,7 @@ servicesModule.service('User', UserService);
 import Referral from './referral.service';
 servicesModule.service('Referral', Referral);
 
+import SocketFactory from './socket-io.service';
+servicesModule.factory('SocketIO', ['$rootScope', SocketFactory]);
+
 export default servicesModule;
