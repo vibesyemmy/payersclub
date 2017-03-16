@@ -1,6 +1,8 @@
 /*jshint esversion: 6 */
 var _ = require("underscore");
 
+var client = require(__dirname + '/modules/nodemailer.js');
+
 Parse.Cloud.beforeSave("Pairing", (req, res)=>{
 	var p = req.object;
 
@@ -76,12 +78,6 @@ Parse.Cloud.define('pair', (req, res) =>{
 	  p.include("to");
 	  return p.first();
 	}).then((px) =>{
-		if(!px) {
-			var Pair = Parse.Object.extend("Pairing");
-			px = new Pair();
-			px.set("to", user);
-		}
-		console.log(checkP1(user, px),checkP2(user, px),checkP3(user, px),checkP4(user, px));
 		if (checkP1(user, px)) {
 			px.set("p1", user);
 		} else if (checkP2(user, px)) {
@@ -158,4 +154,11 @@ function checkP4(user, p) {
     isP4 = true;
   }
   return isP4;
+}
+
+function sendEmail(user, opts) {
+	opts.to = user.get("email");
+	return client.send(opts).then((info) =>{
+		return;
+	});
 }

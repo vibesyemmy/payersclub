@@ -72,23 +72,61 @@ let httpServer = require('http').createServer(app);
 
 var io = require('socket.io').listen(httpServer);
 
-var participants = [];
-var nameCounter  = 1;
+var users = [];
+var count = 0;
 
 io.sockets.on('connection', (s) =>{
-  
-  console.log('Connection established');
 
   s.on('room', (room) =>{
     console.log("Joining "+room+" room.");
     s.join(room);
   });
+
+  s.on('new_user', (user) =>{
+    console.log(user.username+ " is ready to chat.");
+    user.sid = s.id;
+    var userIndex;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].objectId === user.objectId) {
+        userIndex = i;
+      }
+    }
+
+    if (userIndex) {
+      users[userIndex] = user;
+    } else {
+      users.push(user);
+    }
+
+    io.sockets.emit('new_connection', {
+      user: user,
+      sender:"system",
+      created_at: new Date().toISOString(),
+      users: users,
+    });
+    // console.log(users);
+  });
   
   s.on('disconnect', function () {
-    console.log("A user has disconnected");
+    var user;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].sid === s.id) {
+        user = users[i];
+        console.log(user.username+" has disconnected");
+        users.splice(i, 1);
+      }
+    }
+    io.sockets.emit('bye', {
+      user: user,
+      sender:"system",
+      created_at: new Date().toISOString(),
+      users: users,
+    });
   });
 
 });
+
+app.use('/socket', require('./routes/socket.route')(io));
 
 httpServer.listen(port);
 

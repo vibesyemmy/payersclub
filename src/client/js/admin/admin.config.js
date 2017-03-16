@@ -10,6 +10,9 @@ function AdminConfig($stateProvider) {
     resolve: {
       users : (User) =>{
         return User.getUsers();
+      },
+      auth: (User) => {
+        return User.verifyAdmin();
       }
     }
   })

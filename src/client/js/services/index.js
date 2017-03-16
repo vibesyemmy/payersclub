@@ -18,4 +18,7 @@ servicesModule.service('Referral', Referral);
 import SocketFactory from './socket-io.service';
 servicesModule.factory('SocketIO', ['$rootScope', SocketFactory]);
 
+import UploadService from './upload.service';
+servicesModule.service('UploadService', UploadService);
+
 export default servicesModule;

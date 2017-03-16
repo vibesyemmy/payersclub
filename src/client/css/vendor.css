@@ -1352,14 +1352,14 @@ fieldset {
     transform-style: preserve-3d;
   }
   /* Hamburger */
-  .navbar-toggle {
+  /*.navbar-toggle {
     border: 0;
     float: left;
     padding: 18px;
     margin: 0;
     border-radius: 0;
     background-color: #f3f3f3;
-  }
+  }*/
   /* Search */
   #search .panel-body .navbar-form {
     border-bottom: 0;
@@ -1369,7 +1369,7 @@ fieldset {
   }
   .navbar-header {
     /* this is probably redundant */
-    position: fixed;
+    /*position: fixed;*/
     z-index: 3;
     background-color: #f8f8f8;
   }
@@ -1380,8 +1380,24 @@ fieldset {
 }
 
 .sb{
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.sb .panel-body > ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.sb .panel-body > ul > li p {
+  font-size: 14px;
+  color: #9d9d9d;
+  margin-bottom: 10px;
+}
+
+.sb .panel-body > ul > li a {
+  cursor: pointer;
+  font-weight: 700;
 }
 
 .card-base > .card-icon {

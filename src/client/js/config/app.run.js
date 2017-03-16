@@ -15,11 +15,7 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
 
   $rootScope.goBack = () => {
     $window.history.back();
-  }; 
-
-  $rootScope.$on('$stateChangeError', function(event) {
-    $state.go('app.404');
-  });
+  };
 
   $rootScope.$on('$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) {
       $rootScope.stateLoading = true;

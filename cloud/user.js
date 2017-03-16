@@ -101,15 +101,6 @@ Parse.Cloud.job('purgeInactive', (req, stat) =>{
   // Update the Job status message
   stat.message("I just started");
 
-  // doSomethingVeryLong().then(function(result) {
-  //   // Mark the job as successful
-  //   // success and error only support string as parameters
-  //   status.success("I just finished");
-  // }, function(error) {
-  //   // Mark the job as errored
-  //   status.error("There was an error");
-  // })
-
 });
 
 
