@@ -60,6 +60,40 @@ html
                   fieldset.form-group
                     input.form-control.form-control-lg(type='text', name="phone", placeholder='Phone Number', required='required')
                   fieldset.form-group
+                    label(for='plan') Choose plan
+                    |  
+                    select.form-control(name='plan', required='required')
+                      option(value='', selected='selected') ---Please select plan---
+                      option(value='1') Starter - &#x20A6;10,000
+                      option(value='2') Basic - &#x20A6;20,000
+                      option(value='3') Ultima - &#x20A6;50,000
+                      option(value='4') VIP - &#x20A6;100,000
+                  fieldset.form-group
+                    label(for='bk_name') Choose Bank
+                    |  
+                    select.form-control(name='bk_name', ng-model='$ctrl.formData.bk_name', required='required')
+                      option(value='', selected='selected') ---Please select bank---
+                      option(value='access bank') Access Bank
+                      option(value='afri bank') Afri Bank
+                      option(value='citi bank') Citi Bank
+                      option(value='diamond bank') Diamond Bank
+                      option(value='eco bank') Eco Bank
+                      option(value='fcmb') FCMB
+                      option(value='fidelity bank') Fidelity Bank
+                      option(value='first bank of nigeria') First Bank of Nigeria
+                      option(value='gtb') GTB
+                      option(value='heritage bank') Heritage Bank
+                      option(value='keystone bank') Keystone Bank
+                      option(value='skye bank') Skye Bank
+                      option(value='stanbic ibtc bank') Stanbic IBTC Bank
+                      option(value='standard chartered bank') Standard Chartered Bank
+                      option(value='sterling bank') Sterling Bank
+                      option(value='uba') UBA
+                      option(value='union bank') Union Bank
+                      option(value='unity bank') Unity Bank
+                      option(value='wema bank') WEMA Bank
+                      option(value='zenith bank') Zenith Bank
+                  fieldset.form-group
                     input.form-control.form-control-lg(type='text', name="bk_name", placeholder='Bank Name', required='required')
                   fieldset.form-group
                     input.form-control.form-control-lg(type='text', name="bkaccount_name", placeholder='Account Name', required='required')
