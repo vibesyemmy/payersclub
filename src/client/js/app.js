@@ -4,6 +4,7 @@ import 'angular-ui-bootstrap';
 import 'angular-gravatar';
 import 'angular-smart-table';
 import 'angular-socket-io';
+import 'angular-animate';
 
 // Import our app config files
 import constants  from './config/app.constants';
@@ -27,6 +28,7 @@ const requires = [
 	'ui.router',
 	'ui.bootstrap',
 	'ui.gravatar',
+  'ngAnimate',
   'smart-table',
   'templates',
   'app.services',

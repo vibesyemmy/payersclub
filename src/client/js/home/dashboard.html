@@ -8,10 +8,10 @@
   				</div>
   				<div class="panel-body">
   					<ul>
-  						<li class="news">
-                <h4 class="title">Lorem ipsum dolor.</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, non?</p>
-                <a>Read more</a>
+  						<li class="news repeated-item" ng-repeat="news in $ctrl.news | orderBy:'-createdAt'">
+                <h4 class="title" ng-bind="news.title">Lorem ipsum dolor.</h4>
+                <p ng-bind="news.excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, non?</p>
+                <a ui-serf="app.news({id: news.id})">Read more</a>
               </li>
   					</ul>
   				</div>

@@ -11,6 +11,8 @@ let returnRouter = (io) =>{
 	router.put('/', put);
 	router.delete('/', destroy);
 
+	router.post('/news', postNews);
+
 	return router;
 }
 
@@ -34,4 +36,13 @@ function put(req, res) {
 function destroy(req, res) {
 	sio.sockets.emit("incoming_message", { message: "message", user: "user", created_at: "created_at" });
 	res.status(200).json({ message: "Message received" });
+}
+
+function postNews(req, res) {
+	var news = req.body.news;
+
+	news.createdAt = new Date().toISOString();
+
+	sio.sockets.emit("incoming_news", news);
+	res.status(200).json({ message: "News received" });
 }

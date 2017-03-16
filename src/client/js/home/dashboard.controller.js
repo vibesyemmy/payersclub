@@ -9,6 +9,7 @@ class DashCtrl{
 		this._$scope 	= $scope;
 		this.up 			= UploadService;
 		this.io 			= SocketIO;
+		this.news 		= [];
 
 		this.init()
 	}
@@ -22,8 +23,11 @@ class DashCtrl{
 		this.io.on('connect', (s)=> {
 			this.io.emit('new_user', u);
 
-			this.io.on('get_news', (news) =>{
-				console.log(news);
+			this.io.on('incoming_news', (news) =>{
+				if (this.news.length == 4) {
+					this.news.splice(0, 1);
+				}
+				this.news.push(news);
 			});
 		});
 
