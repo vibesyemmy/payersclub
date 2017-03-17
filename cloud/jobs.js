@@ -8,6 +8,7 @@ var env = process.env.NODE_ENV || "dev";
 Parse.Cloud.job('eligible',(req, stat) =>{
   var promises = [];
   var q = new Parse.Query("Pairing");
+  q.limit(999);
   q.find().then((p) =>{
     _.each(p, (pair) =>{
       promises.push(pair.destroy());
