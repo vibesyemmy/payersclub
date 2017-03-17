@@ -26,7 +26,8 @@ class AuthCtrl {
       (res) => {
         this.p.ph = null;
         this.p.gh = null;
-        this._$state.go('app.dash', null, { reload: true });
+        // this._$state.go('app.dash', null, { reload: true });
+        window.location = "/";
       },
       (err) => {
         console.log(err);
