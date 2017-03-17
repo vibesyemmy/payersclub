@@ -47,9 +47,30 @@ function AdminConfig($stateProvider) {
     },
     controller: 'AdminUserCtrl as $ctrl'
   }).state('app.admin.dash.pairs',{
-    url: '/pairs',
+    url: '/pairs/:plan',
+    controller: 'AdminPairsCtrl',
+    controllerAs: '$ctrl',
     templateUrl: 'admin/pairs.html',
-    title: 'Pair'
+    title: 'Pair',
+    resolve: {
+      users: (Pair, $stateParams) =>{
+        var id = $stateParams.plan;
+        return Pair.getUsersByPlan(id);
+      },
+      plan: ($stateParams) => {
+        return $stateParams.plan;
+      }
+    }
+  }).state('app.admin.dash.pairs.pair', {
+    url: '/:id',
+    controller: 'AdminPairCtrl',
+    controllerAs: '$ctrl',
+    templateUrl: 'admin/pair.html',
+    resolve: {
+      user: (Pair, $stateParams) =>{
+        return Pair.user($stateParams.id);
+      }
+    }
   }).state('app.admin.dash.chat',{
     url: '/chat',
     templateUrl: 'admin/chat.html',

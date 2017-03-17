@@ -83,7 +83,6 @@ io.sockets.on('connection', (s) =>{
   });
 
   s.on('new_user', (user) =>{
-    console.log(user.username+ " is ready to chat.");
     user.sid = s.id;
     var userIndex;
     for (var i = 0; i < users.length; i++) {
@@ -97,6 +96,7 @@ io.sockets.on('connection', (s) =>{
     } else {
       users.push(user);
     }
+    console.log(user.username+ " is ready to chat.", users.length);
 
     io.sockets.emit('new_connection', {
       user: user,

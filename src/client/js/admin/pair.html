@@ -1,0 +1,24 @@
+<div class="row">
+	<h1 ng-bind="$ctrl.user.username"></h1>
+	<p>Is paired? <span ng-bind="$ctrl.user.isPaired"></span></p>
+	<p>Is recyclable? <span ng-bind="$ctrl.user.isRecycled"></span></p>
+</div>
+
+<div class="row">
+	<select ng-model="$ctrl.phTo">
+		<option ng-repeat="u in $ctrl.users" value="{{u}}" ng-bind="u.username"></option>
+	</select>
+
+	<div class="user-wrap" ng-if="$ctrl.phTo">
+		<h4>Attach Donor</h4>
+		<div class="panel">
+			<div class="panel-body">
+				<button ng-click="$ctrl.attach(1)" class="col-md-3 btn btn-success" ng-disabled="$ctrl.phTo.p1">P1</button>
+				<button ng-click="$ctrl.attach(2)" class="col-md-3 btn btn-success" ng-disabled="$ctrl.phTo.p2">P2</button>
+				<button ng-click="$ctrl.attach(3)" class="col-md-3 btn btn-success" ng-disabled="!$ctrl.phTo.isRecycled || $ctrl.phTo.p3">P3</button>
+				<button ng-click="$ctrl.attach(4)" class="col-md-3 btn btn-success" ng-disabled="!$ctrl.phTo.isRecycled  || $ctrl.phTo.p4">P3</button>
+			</div>
+		</div>
+
+	</div>
+</div>

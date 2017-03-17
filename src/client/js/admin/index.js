@@ -15,5 +15,11 @@ adminModule.controller('AdminCtrl', AdminCtrl);
 import AdminUserCtrl from './admin.user.controller';
 adminModule.controller('AdminUserCtrl', AdminUserCtrl);
 
+import Pairs from './admin.pair.controller';
+adminModule.controller('AdminPairsCtrl', Pairs.pairs);
+
+import Pair from './admin.pair.controller';
+adminModule.controller('AdminPairCtrl', Pair.pair);
+
 
 export default adminModule;

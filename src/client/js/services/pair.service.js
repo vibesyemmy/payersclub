@@ -12,6 +12,48 @@ class Pair {
     this.gh = null;
 	}
 
+	/*
+   * To: Attach donor to user with this id
+   * User: Donor
+   * Position: Either p1, 2, p3 or p4
+   */
+  attach(to, user, position) {
+    return this._$http({
+    	method: 'POST',
+    	url: this._AppConstants.api + '/functions/attach',
+      headers:{
+        'X-Parse-Application-Id': this._AppConstants.appId
+      },
+      data : {
+        to : to,
+        uid: user,
+        p: position
+      }
+    }).then((res) =>{
+    	return res.data.result;
+    }).catch((err) =>{
+    	return err;
+    })
+  }
+
+	getUsersByPlan(plan) {
+		return this._$http({
+			method: 'GET',
+			url: this._AppConstants.api +"/classes/_User",
+			headers:this.header(),
+			params: {
+				'where' :{
+					'plan': plan,
+					'isPaired': false
+				}
+			}
+		}).then((res) =>{
+			return res.data.results;
+		}).catch((err) =>{
+			return res.data
+		});
+	}
+
 	getStarter(){
 
 	}
@@ -70,6 +112,31 @@ class Pair {
 		}).then((res) =>{
 			this.ph = res.data.results[0]; 
 			return res.data.results[0];
+		}).catch((err) =>{
+			return err;
+		});
+	}
+
+	usersByPlan(id, plan) {
+		var user = this.otherUser(id);
+		var users = [];
+		let deferred = this._$q.defer();
+		return this._$http({
+			method:'GET',
+			url: this._AppConstants.api +"/classes/Pairing",
+      headers:this.header(),
+      params: {
+      	'where' : {
+      		'to': {
+      			"$ne": user
+      		},
+      		'plan': user.plan
+      	},
+      	include: ['p1', 'p2', 'p3', 'p4', 'to'],
+      	order:'-createdAt'
+      }
+		}).then((pairs) =>{
+			return pairs.data.results;
 		}).catch((err) =>{
 			return err;
 		});

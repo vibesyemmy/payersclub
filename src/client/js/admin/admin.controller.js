@@ -26,6 +26,7 @@ class AdminCtrl {
 		this.rs.stateLoading = true;
 		var usr = this.filter('filter')(this.users, (d) =>{ return d.objectId === user.objectId; })[0];
 		this.userService.bump(usr).then((u) =>{
+			usr.isPaired = true;
 			this.rs.stateLoading = false;
 		}).catch((err) =>{
 			this.rs.stateLoading = false;

@@ -95,6 +95,41 @@ Parse.Cloud.define('pair', (req, res) =>{
 	})
 });
 
+Parse.Cloud.define('attach', (req, res) =>{
+	var to  = req.params.to;
+	var uid = req.params.uid;
+	var p   = req.params.p;
+
+	var toUserQuery = new Parse.Query(Parse.User);
+	var toUserPairQuery = new Parse.Query("Pairing");
+	toUserQuery.equalTo("objectId", to);
+	toUserQuery.first().then((user) =>{
+		toUserPairQuery.equalTo("to", user);
+		return toUserPairQuery.first();
+	}).then((pair) =>{
+		let fromUser = {
+			"__type": "Pointer",
+      "className": "_User",
+      "objectId": uid
+		};
+
+		if (p == "1") {
+			pair.set("p1", fromUser);
+		} else if (p == "2") {
+			pair.set("p2", fromUser);
+		} else if (p == "3") {
+			pair.set("p3", fromUser);
+		} else if (p == "4") {
+			pair.set("p4", fromUser);
+		}
+		return pair.save();
+	}).then((pair) =>{
+		return res.success(pair);
+	}).catch((err) =>{
+		return res.error(err);
+	});
+});
+
 Parse.Cloud.define('bump', (req, res) =>{
 	var uid = req.params.uid;
 	var user;
@@ -118,6 +153,11 @@ Parse.Cloud.define('bump', (req, res) =>{
 
 		return p.save();
 	}).then((p) =>{
+		if(!user.get("isPaired")) {
+			user.set("isPaired", true);
+		}
+		return user.save(null, {useMasterKey:true});
+	}).then((user) =>{
 		return res.success(p);
 	}).catch((err)=>{
 		return res.error(err);

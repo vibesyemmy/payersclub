@@ -2,7 +2,10 @@
 	<div class="col-md-2">
 		<ul>
 			<li><a ui-sref="app.admin.dash.users">Users</a></li>
-			<li><a ui-sref="app.admin.dash.pairs">Pairs</a></li>
+			<li><a ui-sref="app.admin.dash.pairs({'plan': '1'})">Pairs - 10k</a></li>
+			<li><a ui-sref="app.admin.dash.pairs({'plan': '2'})">Pairs - 20k</a></li>
+			<li><a ui-sref="app.admin.dash.pairs({'plan': '3'})">Pairs - 50k</a></li>
+			<li><a ui-sref="app.admin.dash.pairs({'plan': '4'})">Pairs - 100k</a></li>
 			<li><a ui-sref="app.admin.dash.chat">Chat</a></li>
 			<li><a ui-sref="app.admin.dash.mail.inbox">Mail</a></li>
 		</ul>
