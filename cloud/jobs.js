@@ -3,6 +3,24 @@ var _ = require("underscore");
 var r = require('../service/service-helper.js');
 var env = process.env.NODE_ENV || "dev";
 
+Parse.Cloud.job('eligible',(req, stat) =>{
+  var q = new Parse.Query("Pairing");
+  q.find().then((p) =>{
+    var promises = [];
+
+    _.each(p, (px) =>{
+      p.set("eligible", true);
+      promises.push(p.save());
+    });
+
+    return Parse.Promise.when(promises);
+  }).then((p) =>{
+    return stat.success("Done");
+  }).catch((err) =>{
+    return stat.error(err);
+  });
+});
+
 Parse.Cloud.job('match-10k', (req, stat) =>{
   // the params passed through the start request
   var params = req.params;
