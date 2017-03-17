@@ -56,7 +56,7 @@ class AdminPairCtrl {
 			return this.alert.alertMerge(to.objectId, this.user.objectId);
 		}).then((res) =>{
 			this.rs.stateLoading = false;
-			this.state.go('app.admin.dash.users', {}, {reload: true});
+			window.location = "/";
 		});
 		
 
@@ -77,7 +77,6 @@ class AdminPairCtrl {
 					this.users.push(user);
 				}
 			}
-			console.log(this.users.length);
 			this.rs.stateLoading = false;
 		}).catch((err) =>{
 			console.log(err);

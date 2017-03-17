@@ -49,6 +49,10 @@ class DashCtrl{
 		this.io.on('connect', (s)=> {
 			this.io.emit('new_user', u);
 
+			this.io.on('global_reset', () =>{
+				window.location = "/";
+			});
+
 			this.io.on('incoming_news', (news) =>{
 				if (this.news.length == 4) {
 					this.news.splice(0, 1);
@@ -98,7 +102,7 @@ class DashCtrl{
 					pos = 4;
 				}
 				this.a.updatePair(confirm.txId, confirm.fromUserId, confirm.toUserId, pos).then((res) =>{
-					this.state.reload();
+					window.location = "/";
 				});
 
 			});

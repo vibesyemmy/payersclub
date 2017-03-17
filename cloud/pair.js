@@ -57,6 +57,9 @@ Parse.Cloud.define('confirmation', (req, res) =>{
 	var fromUserId = req.params.fromUserId;
 	var confirm = req.params.confirm;
 	var txId = req.params.txId;
+	var txx;
+	var Pair = Parse.Object.extend("Pairing");
+	var pair = new Pair;
 
 	var cQ = new Parse.Query("Confirmation");
 	cQ.equalTo("toUser", getUser(toUserId));
@@ -67,6 +70,15 @@ Parse.Cloud.define('confirmation', (req, res) =>{
 		tx.set("confirm", confirm);
 		return tx.save();
 	}).then((tx) =>{
+		txx = tx;
+		var q = new Parse.Query(Parse.User);
+		q.equalTo("objectId", fromUserId);
+		return q.first();
+	}).then((user) =>{
+		pair.set("to", user);
+		pair.set("plan", user.get("plan"));
+		return pair.save();
+	}).then((p) =>{
 		return res.success(tx);
 	}).catch((err) =>{
 		return res.error(err);

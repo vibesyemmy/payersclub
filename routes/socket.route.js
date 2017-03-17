@@ -78,6 +78,6 @@ function put(req, res) {
 }
 
 function destroy(req, res) {
-	sio.sockets.emit("incoming_message", { message: "message", user: "user", created_at: "created_at" });
+	sio.sockets.emit("global_reset", { message: "message", user: "user", created_at: "created_at" });
 	res.status(200).json({ message: "Message received" });
 }

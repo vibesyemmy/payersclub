@@ -47,7 +47,8 @@ class Pair {
 					'isPaired': false
 				}
 			},
-			limit: 999
+			limit: 999,
+			order: '-createdAt'
 		}).then((res) =>{
 			return res.data.results;
 		}).catch((err) =>{

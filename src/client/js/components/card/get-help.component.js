@@ -26,9 +26,10 @@ class GHCtrl {
 	}
 
 	confirm(){
-		console.log(this.current.objectId, this.user.objectId, this.txid);
+		// console.log(this.current.objectId, this.user.objectId, this.txid);
 		this.alert.confirmTx(this.current.objectId, this.user.objectId, this.txid).then((res) =>{
 			console.log(res);
+			window.location = "/";
 		});
 	}
 
