@@ -5,6 +5,8 @@ import 'angular-gravatar';
 import 'angular-smart-table';
 import 'angular-socket-io';
 import 'angular-animate';
+import 'angularjs-toaster';
+import 'angular-web-notification';
 
 // Import our app config files
 import constants  from './config/app.constants';
@@ -29,6 +31,7 @@ const requires = [
 	'ui.bootstrap',
 	'ui.gravatar',
   'ngAnimate',
+  'toaster',
   'smart-table',
   'templates',
   'app.services',

@@ -1,9 +1,14 @@
 /*jshint esversion: 6 */
 
 class GHCtrl {
-	constructor(){
+	constructor(Pair, Alert, $rootScope, UploadService, User, Token){
 		'ngInject';
 		this.plan;
+		this.alert = Alert;
+		this.pair  = Pair;
+		this.rs = $rootScope;
+		this.up = UploadService;
+		this.current = User.current;
 	}
 
 	setPlan(p) {
@@ -18,6 +23,17 @@ class GHCtrl {
 			ppp =  "100,000";
 		}
 		return ppp;
+	}
+
+	confirm(){
+		console.log(this.current.objectId, this.user.objectId, this.txid);
+		this.alert.confirmTx(this.current.objectId, this.user.objectId, this.txid).then((res) =>{
+			console.log(res);
+		});
+	}
+
+	purge(){
+
 	}
 }
 

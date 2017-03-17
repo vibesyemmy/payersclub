@@ -8,7 +8,14 @@ class AuthCtrl {
 
     this.title = $state.current.title;
     this.authType = $state.current.name.replace('app.', '');
+    this.alert    = {};
+    this.alert.show = false;
 
+  }
+
+  closeAlert() {
+    this.alert    = {};
+    this.alert.show = false;
   }
 
   submitForm() {
@@ -21,6 +28,9 @@ class AuthCtrl {
       (err) => {
         console.log(err);
         this.isSubmitting = false;
+        this.alert.type = "danger";
+        this.alert.msg = err.data.error;
+        this.alert.show = true;
         this.errors = err.data.errors;
       }
     );

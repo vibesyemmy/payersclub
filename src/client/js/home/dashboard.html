@@ -18,15 +18,24 @@
   			</div>
   		</div>
   		<div class="ct col-md-7">
-  			<div class="row">
-	  			<provide-help-card ng-if="$ctrl.ph" txid="$ctrl.ph.objectId" plan="$ctrl.ph.plan" user="$ctrl.ph.to" type=0 class="panel panel-default card col-md-4"></provide-help-card>  			
+        <div class="row">
+          <div uib-alert ng-show="$ctrl.alert.show" ng-class="'alert-' + (alert.type || 'warning')" close="$ctrl.closeAlert()">{{$ctrl.alert.msg}}</div>
+        </div>
+  			
+        <div class="row">
+	  			<provide-help-card file="$ctrl.upload(file)" ng-if="$ctrl.ph" txid="$ctrl.ph.objectId" plan="$ctrl.ph.plan" user="$ctrl.ph.to" type=0 class="panel panel-default card col-md-4"></provide-help-card>  			
   			</div>
-  			<div ng-if="$ctrl.pair" class="row" style="margin-top: 45px;">
-	  			<get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p1" txid="$ctrl.pair.objectId" position="p1" user="$ctrl.pair.p1" type=1 class="panel panel-info card col-md-4"></get-help-card>
+  			
+        <div ng-if="$ctrl.pair" class="row" style="margin-top: 45px;">
+	  			<get-help-card ng-if="!$ctrl.pair.confirmedP1" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p1" txid="$ctrl.pair.objectId" position="p1" user="$ctrl.pair.p1" type=1 class="panel panel-info card col-md-4"></get-help-card>
 	  			
-          <get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p2" txid="$ctrl.pair.objectId" position="p2" user="$ctrl.pair.p2" type=1 class="panel panel-info card col-md-4"></get-help-card>
-  				<recycle-card class="panel panel-danger card col-md-4"></recycle-card>
-  				<recycle-card class="panel panel-danger card col-md-4"></recycle-card>
+          <get-help-card ng-if="!$ctrl.pair.confirmedP2" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p2" txid="$ctrl.pair.objectId" position="p2" user="$ctrl.pair.p2" type=1 class="panel panel-info card col-md-4"></get-help-card>
+
+          <get-help-card ng-if="$ctrl.pair.p3.isRecycled" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p3" txid="$ctrl.pair.objectId" position="p3" user="$ctrl.pair.p3" type=1 class="panel panel-info card col-md-4"></get-help-card>
+
+          <get-help-card ng-if="$ctrl.pair.p4.isRecycled" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p4" txid="$ctrl.pair.objectId" position="p4" user="$ctrl.pair.p4" type=1 class="panel panel-info card col-md-4"></get-help-card>
+  				<recycle-card ng-if="$ctrl.pair.p3.isRecycled" class="panel panel-danger card col-md-4"></recycle-card>
+  				<recycle-card ng-if="$ctrl.pair.p4.isRecycled" class="panel panel-danger card col-md-4"></recycle-card>
   			</div>
   		</div>
   	</div>

@@ -10,7 +10,7 @@ class HomeCtrl {
       type: User.current ? 'feed' : 'all'
     };
 
-    if (User.current) {
+    if (User.current.role == 0) {
       $state.go('app.dash');
     }
 

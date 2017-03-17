@@ -1,6 +1,11 @@
 <section class="home-page">
   <div class="container page">
     <div class="row">
+      <div class="col-md-6">
+        <div uib-alert ng-show="$ctrl.alert.show" ng-class="'alert-' + (alert.type || 'warning')" close="$ctrl.closeAlert()">{{$ctrl.alert.msg}}</div>
+      </div>
+    </div>
+    <div class="row">
 
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center" ng-bind="::$ctrl.title"></h1>

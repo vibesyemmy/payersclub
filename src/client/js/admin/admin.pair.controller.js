@@ -1,5 +1,5 @@
 class AdminPairsCtrl {
-	constructor(users, Pair, $rootScope){
+	constructor(users, Pair, $rootScope, $state){
 		'ngInject';
 
 		this.users = users;
@@ -8,6 +8,7 @@ class AdminPairsCtrl {
 		this.itemsByPage = 10;
 		this.rs = $rootScope;
 		this.predicates = ['objectId', 'lastName'];
+		this.state = $state;
 	}
 
 	getUsers(){
@@ -23,13 +24,14 @@ class AdminPairsCtrl {
 }
 
 class AdminPairCtrl {
-	constructor(user, Pair, $rootScope){
+	constructor(user, Pair, $rootScope, $state, Alert){
 		'ngInject';
 		this.rs = $rootScope;
 		this.user = user;
 		this.users = [];
 		this.pair = Pair;
-
+		this.state = $state;
+		this.alert = Alert;
 		this.init();
 	}
 
@@ -39,11 +41,22 @@ class AdminPairCtrl {
 		this.pair.attach(to.objectId, this.user.objectId, p).then((pair) =>{
 			console.log(pair);
 			for (var i = 0; i < this.users.length; i++) {
-				var u = this.users[i].to;
+				var u = this.users[i];
 				console.log(u, pair.to);
-				// if (true) {}
+				if (p == "1") {
+					u.p1 = pair.to;
+				} else if (p == "2") {
+					u.p2 = pair.to;
+				} else if (p == "3") {
+					u.p3 = pair.to;
+				} else {
+					u.p4 = pair.to;
+				}
 			}
+			return this.alert.alertMerge(to.objectId, this.user.objectId);
+		}).then((res) =>{
 			this.rs.stateLoading = false;
+			this.state.go('app.admin.dash.users', {}, {reload: true});
 		});
 		
 

@@ -1,8 +1,9 @@
 class UploadService {
-	constructor($http, $q) {
+	constructor($http, $q, AppConstants) {
 		'ngInject';
 		this._$http = $http;
 		this._$q = $q;
+		this._AppConstants = AppConstants;
 	}
 
 	init(file){

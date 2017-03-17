@@ -13,6 +13,8 @@
     "angular-ui-bootstrap": "^2.5.0",
     "angular-ui-router": "^0.4.2",
     "angular-utils-pagination": "^0.11.1",
+    "angular-web-notification": "^1.2.10",
+    "angularjs-toaster": "^2.1.0",
     "body-parser": "^1.17.1",
     "debug": "^2.6.1",
     "express": "^4.15.2",

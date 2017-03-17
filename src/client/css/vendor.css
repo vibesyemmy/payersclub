@@ -1669,3 +1669,75 @@ fieldset {
   from { opacity:1; }
   to { opacity:0; }
 }
+
+/*-------------------
+        toastr
+--------------------*/
+
+
+.toastr-row label {
+    font-weight: 400;
+}
+
+.checkbox-list .checker span {
+    float: left;
+    margin-right: 10px;
+}
+
+.toastr-pad  input, .toastr-row label{
+    margin-bottom: 10px;
+}
+
+#toast-container > div, #toast-container > :hover{
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+pre {
+    border-radius: 0;
+    border: 1px solid #ddd;
+    background: none;
+}
+
+/*
+  PH button
+*/
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.card-overlay {
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  background: #fff;
+}
+
+.card-overlay h4 {
+  position: absolute;
+  top: 65px;
+  left: 43px;
+}

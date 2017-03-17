@@ -13,7 +13,15 @@
 	<p><i class="fa fa-phone"></i> {{$ctrl.user.phone}}</p>
 </div>
 <div class="panel-footer">
-	<button ng-class="{'btn-warning': $ctrl.type === 0}" ng-if="$ctrl.type === 0" class="btn" ng-click="$ctrl.ph($ctrl.user)">Made Payment</button>
+	<label uib-popover="Confim donation and upload proof of payment" popover-trigger="'mouseenter'" ng-if="$ctrl.type === 0" class="btn btn-warning btn-file">
+		Made Payment  <file accept=".png,.jpg" ng-model="$ctrl.myFile" ng-change="$ctrl.upload()" type="file" style="display: none;">
+	</label>
+	
 	<button ng-if="$ctrl.type === 0" class="btn btn-danger">Decline</button>
-	<button ng-class="{'btn-success': $ctrl.type === 1}" ng-if="$ctrl.type === 1" class="btn">Confirm Payment</button>
+	<button ng-class="{'btn-success': $ctrl.type === 1}" ng-click="$ctrl.confirm()" ng-if="$ctrl.type === 1" class="btn">Confirm Payment</button>
+</div>
+
+<div class="card-overlay" ng-if="$ctrl.awaiting">
+	<h4>Awaiting Confirmation</h4>
+  <div class="loader">Loading...</div>
 </div>

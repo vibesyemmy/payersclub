@@ -14,6 +14,9 @@ componentsModule.component('homeComp', Home);
 import Override from './overide.directive';
 componentsModule.directive('override', Override);
 
+import File from './file.directive';
+componentsModule.directive('file', File);
+
 import Header from './header.directive';
 componentsModule.directive('headerSlide', Header);
 

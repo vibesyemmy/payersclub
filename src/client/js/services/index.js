@@ -21,4 +21,7 @@ servicesModule.factory('SocketIO', ['$rootScope', SocketFactory]);
 import UploadService from './upload.service';
 servicesModule.service('UploadService', UploadService);
 
+import AlertService from './alert.service';
+servicesModule.service('Alert', AlertService);
+
 export default servicesModule;

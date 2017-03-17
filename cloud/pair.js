@@ -14,6 +14,65 @@ Parse.Cloud.beforeSave("Pairing", (req, res)=>{
 
 });
 
+Parse.Cloud.define('updatePair', (req, res) =>{
+	var pos = req.params.pos;
+	var toUserId = req.params.toUserId;
+	var fromUserId = req.params.fromUserId;
+	var txId = req.params.txId;
+
+	var toUser = getUser(toUserId);
+
+	var pair = new Parse.Query("Pairing");
+	pair.equalTo("to", toUser);
+	pair.equalTo("objectId", txId);
+	pair.first().then((p) =>{
+		if (pos == 1) {
+			p.set("confirmedP1", true);
+		} else if (pos == 2 ) {
+			p.set("confirmedP2", true);
+		} else if (pos == 3 ) {
+			p.set("confirmedP3", true);
+		} else if (pos == 4 ) {
+			p.set("confirmedP4", true);
+		}
+
+		return p.save();
+	}).then((p) =>{
+		return res.success(p);
+	}).catch((err) => {
+		return res.error(p);
+	});
+});
+
+function getUser(id) {
+		return {
+			"__type": "Pointer",
+      "className": "_User",
+      "objectId": id
+		};
+	}
+
+Parse.Cloud.define('confirmation', (req, res) =>{
+	var toUserId = req.params.toUserId;
+	var fromUserId = req.params.fromUserId;
+	var confirm = req.params.confirm;
+	var txId = req.params.txId;
+
+	var cQ = new Parse.Query("Confirmation");
+	cQ.equalTo("toUser", getUser(toUserId));
+	cQ.equalTo("fromUser", getUser(fromUserId));
+	cQ.equalTo("txId", txId);
+
+	cQ.first().then((tx) =>{
+		tx.set("confirm", confirm);
+		return tx.save();
+	}).then((tx) =>{
+		return res.success(tx);
+	}).catch((err) =>{
+		return res.error(err);
+	});
+});
+
 Parse.Cloud.afterSave("Pairing", (req, res) =>{
 	var p = req.object;
 	var p1, p2, p3, p4;
