@@ -87,6 +87,9 @@ class User {
         url: this._AppConstants.api + '/classes/_User/',
         headers:{
           'X-Parse-Application-Id': this._AppConstants.appId
+        },
+        params: {
+          limit: 999
         }
       }).then((res) =>{
         this.users = res.data.results;

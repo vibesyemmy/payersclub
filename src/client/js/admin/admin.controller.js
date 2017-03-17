@@ -6,6 +6,8 @@ class AdminCtrl {
 		this.rs = $rootScope;
 		this.itemsByPage = 10;
 		this.filter = $filter;
+
+		console.log(users.length);
 	}
 
 	pair(user) {
