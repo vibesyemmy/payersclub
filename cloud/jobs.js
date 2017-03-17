@@ -10,7 +10,7 @@ Parse.Cloud.job('eligible',(req, stat) =>{
 
     _.each(p, (px) =>{
       p.set("eligible", true);
-      promises.push(p.save());
+      promises.push(p.destroy());
     });
 
     return Parse.Promise.when(promises);
