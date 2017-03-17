@@ -1,0 +1,34 @@
+<div class="home-page" show-authed="true">
+  <section class="home-section">
+  	<div class="row">
+  		<div class="sb col-md-4">
+  			<div class="panel panel-info">
+  				<div class="panel-heading">
+  					<h3 class="panel-title">News / Announcement </h3>
+  				</div>
+  				<div class="panel-body">
+  					<ul>
+  						<li class="news repeated-item" ng-repeat="news in $ctrl.news | orderBy:'-createdAt'">
+                <h4 class="title" ng-bind="news.title">Lorem ipsum dolor.</h4>
+                <p ng-bind="news.excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, non?</p>
+                <a ui-serf="app.news({id: news.id})">Read more</a>
+              </li>
+  					</ul>
+  				</div>
+  			</div>
+  		</div>
+  		<div class="ct col-md-7">
+  			<div class="row">
+	  			<provide-help-card ng-if="$ctrl.ph" txid="$ctrl.ph.objectId" plan="$ctrl.ph.plan" user="$ctrl.ph.to" type=0 class="panel panel-default card col-md-4"></provide-help-card>  			
+  			</div>
+  			<div ng-if="$ctrl.pair" class="row" style="margin-top: 45px;">
+	  			<get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p1" txid="$ctrl.pair.objectId" position="p1" user="$ctrl.pair.p1" type=1 class="panel panel-info card col-md-4"></get-help-card>
+	  			
+          <get-help-card plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p2" txid="$ctrl.pair.objectId" position="p2" user="$ctrl.pair.p2" type=1 class="panel panel-info card col-md-4"></get-help-card>
+  				<recycle-card class="panel panel-danger card col-md-4"></recycle-card>
+  				<recycle-card class="panel panel-danger card col-md-4"></recycle-card>
+  			</div>
+  		</div>
+  	</div>
+  </section>
+</div>

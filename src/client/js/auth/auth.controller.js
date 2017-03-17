@@ -13,10 +13,10 @@ class AuthCtrl {
 
   submitForm() {
     this.isSubmitting = true;
-    this.formData.username = this.formData.username.toLowerCase();
+    this.formData.username = this.formData.username.toLowerCase(); 
     this._User.attemptAuth(this.authType, this.formData, this.plan).then(
       (res) => {
-        this._$state.go('app.home');
+        this._$state.go('app.dash', null, { reload: true });
       },
       (err) => {
         console.log(err);

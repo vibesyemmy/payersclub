@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+var _ = require("underscore");
+
 var client = require(__dirname + '/modules/nodemailer.js');
 
 Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
@@ -23,7 +25,60 @@ Parse.Cloud.afterSave(Parse.User, (req, res) =>{
 	if (!user.existed()) {
 		user.set("isPaired", false);
 		user.set("isRecycled", false);
-		return user.save(null,{useMasterKey: true}).then((p) =>{
+		return user.save(null,{useMasterKey: true}).then((u) =>{
+			// Create pairings for donors
+			var pairing = new Pairing();
+			pairing.set("to", u); 
+			pairing.set("plan", u.get("plan"));
+			pairing.set("eligible", false);
+			return pairing.save(null,{useMasterKey: true});
+		}).then((p) =>{
+			// Pair to other account to donate
+			/*
+			 * Check first pair query
+			 */
+		 	var q1 = new Parse.Query("Pairing");
+		 	q1.doesNotExist("p1");
+		 	q1.equalTo("eligible", true);
+
+		 	/*
+			 * Check second pair query
+			 */
+
+		 	var q2 = new Parse.Query("Pairing");
+		 	q2.doesNotExist("p2");
+		 	q2.equalTo("eligible", true);
+
+		 	/*
+			 * Check third pair query
+			 */
+
+		 	var q3 = new Parse.Query("Pairing");
+		 	q3.doesNotExist("p3");
+		 	q3.equalTo("eligible", true);
+
+		 	var mainQuery = Parse.Query.or(q1, q2, q3);
+		 	mainQuery.ascending("createdAt");
+
+		 	return mainQuery.first();
+		}).then((p) =>{
+			var env = process.env.NODE_ENV || "dev";
+			if (env === "dev") {
+				return res.success();
+			}
+			
+			if (!p) {
+				return sendEmail(user, mailOptions);
+			}
+
+			if (!p.get("p1")) {
+				p.set("p1", user);
+				return sendEmail(user, mailOptions);
+			} else if (!p.get("p1")){
+				p.set("p2", user);
+				return sendEmail(user, mailOptions);
+			} 
+			p.set("p3", user);
 			return sendEmail(user, mailOptions);
 		}).then((info) =>{
 			return res.success(info);
@@ -44,7 +99,6 @@ Parse.Cloud.job('purgePairs', (req, stat) =>{
 
   // Update the Job status message
   stat.message("I just started");
-
   var p = new Parse.Query("Pairing");
 
   p.find().then((px) =>{
@@ -60,17 +114,9 @@ Parse.Cloud.job('purgePairs', (req, stat) =>{
   }).catch((err) =>{
   	stat.error(err);
   });
+});
 
-  // doSomethingVeryLong().then(function(result) {
-  //   // Mark the job as successful
-  //   // success and error only support string as parameters
-  //   status.success("I just finished");
-  // }, function(error) {
-  //   // Mark the job as errored
-  //   status.error("There was an error");
-  // })
 
-})
 
 function sendEmail(user, opts) {
 	opts.to = user.get("email");

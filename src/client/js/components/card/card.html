@@ -1,0 +1,19 @@
+<div class="panel-heading">
+	<span ng-if="$ctrl.type === 0">Outgoing Funds</span>
+	<span ng-if="$ctrl.type === 1">Incoming Funds</span>
+	<a><span class="pull-right"><i class="fa fa-comment"></i></span></a>
+</div>
+<div class="panel-body">
+	<p>Transaction Id: {{$ctrl.txid}}</p>
+	<p ng-if="$ctrl.type === 0">Receiver: {{$ctrl.user.bkaccount_name}}</p>
+	<p ng-if="$ctrl.type === 1">Payer: {{$ctrl.user.bkaccount_name}}</p>
+	<p>Amount: &#8358;{{$ctrl.setPlan($ctrl.plan)}}</p>
+	<p ng-if="$ctrl.type === 0" ng-bind="$ctrl.user.bk_name"></p>
+	<p ng-if="$ctrl.type === 0" ng-bind="$ctrl.user.bkaccount_number"></p>
+	<p><i class="fa fa-phone"></i> {{$ctrl.user.phone}}</p>
+</div>
+<div class="panel-footer">
+	<button ng-class="{'btn-warning': $ctrl.type === 0}" ng-if="$ctrl.type === 0" class="btn" ng-click="$ctrl.ph($ctrl.user)">Made Payment</button>
+	<button ng-if="$ctrl.type === 0" class="btn btn-danger">Decline</button>
+	<button ng-class="{'btn-success': $ctrl.type === 1}" ng-if="$ctrl.type === 1" class="btn">Confirm Payment</button>
+</div>

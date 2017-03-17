@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col-md-4">
+		<div class="table-responsive">
+			<table st-table="$ctrl.users" class="table table-striped">
+				<thead>
+					<tr>
+						<th st-sort="objectId">User Id</th>
+						<th st-sort="email">Email</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="row in $ctrl.users">
+						<td><a ui-sref="app.admin.dash.pairs.pair({id: row.objectId})" ng-bind="row.objectId"></a></td>
+						<td><a ui-sref="app.admin.dash.pairs.pair({id: row.objectId})" ng-bind="row.username"></a></td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="5" class="text-center">
+							<div st-pagination="" st-items-by-page="$ctrl.itemsByPage" st-displayed-pages="7"></div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-8" ui-view></div>
+</div>

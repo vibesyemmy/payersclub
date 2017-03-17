@@ -1,5 +1,5 @@
 class HomeCtrl {
-  constructor(User, AppConstants, $scope) {
+  constructor(Pair, User, AppConstants, $scope, $state, SocketIO) {
     'ngInject';
 
     this.appName = AppConstants.appName;
@@ -9,6 +9,12 @@ class HomeCtrl {
     this.listConfig = {
       type: User.current ? 'feed' : 'all'
     };
+
+    if (User.current) {
+      $state.go('app.dash');
+    }
+
+    
 
   }
 

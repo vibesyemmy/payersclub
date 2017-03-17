@@ -1,0 +1,37 @@
+<div class="row" ui-view>
+	<div class="panel">
+		<div class="table-responsive">
+			<table st-table="$ctrl.users" class="table table-striped">
+				<thead>
+				<tr>
+					<th st-sort="bkaccount_name">name</th>
+					<th>username</th>
+					<th st-sort="email">email</th>
+					<th st-sort="plan">plan</th>
+					<th>is paired</th>
+					<th>is recycled</th>
+					<th>Bump User</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="row in $ctrl.users">
+					<td><a ui-sref="app.admin.dash.users.user({id: row.objectId})" ng-bind="row.bkaccount_name"></a></td>
+					<td ng-bind="row.username"></td>
+					<td ng-bind="row.email"></td>
+					<td ng-bind="row.plan"></td>
+					<td><a ng-click="$ctrl.pair(row)" ng-bind="row.isPaired"></a></td>
+					<td ng-bind="row.isRecycled"></td>
+					<td><a ng-click="$ctrl.bump(row)">&#8593;</a></td>
+				</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="5" class="text-center">
+							<div st-pagination="" st-items-by-page="$ctrl.itemsByPage" st-displayed-pages="7"></div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>

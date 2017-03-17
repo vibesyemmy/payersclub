@@ -20,6 +20,7 @@ var run             = require('gulp-run');
 var jsFiles   			= "src/client/js/**/*.js";
 var cssFiles   			= "src/client/css/**/*.css";
 var viewFiles 			= "src/client/js/**/*.html";
+var vendor          = ["src/client/vendor/js/jquery.min.js", "src/client/vendor/js/bootstrap.min.js", "src/client/vendor/js/bootstrap-wysihtml5.js"];
 
 var interceptErrors = function(error) {
   var args = Array.prototype.slice.call(arguments);
@@ -33,6 +34,18 @@ var interceptErrors = function(error) {
   // Keep gulp from hanging on this task
   this.emit('end');
 };
+
+gulp.task('vendor', function(){
+  var jq = gulp.src(vendor, {base: 'src/client/vendor/js/'})
+      .pipe(concat('vendor.js'))
+      .pipe(rename('vendor.min.js'))
+      .pipe(uglify('vendor.min.js'))
+      .pipe(gulp.dest('./build'));
+  var map = gulp.src('./src/client/vendor/js/jquery/dist/jquery.min.map')
+      .pipe(gulp.dest('./build'));
+
+  return merge(jq, map);
+});
 
 gulp.task('html', function() {
   return gulp.src("src/client/index.html")
@@ -86,12 +99,13 @@ gulp.task('start', ['build'] , function () {
 
 // This task is used for building production ready
 // minified JS/CSS files into the dist/ folder
-gulp.task('build', ['html', 'browserify', 'minify-css'], function() {
+gulp.task('build', ['html', 'browserify', 'minify-css', 'vendor'], function() {
   var html = gulp.src("build/index.html")
                  .pipe(htmlmin({collapseWhitespace: true}))
                  .pipe(gulp.dest('./dist/'));
 
-  var js = gulp.src("build/main.js")
+  var js = gulp.src(["build/vendor.min.js","build/main.js"], {base: 'build'})
+               .pipe(concat('main.js'))
                .pipe(uglify())
                .pipe(gulp.dest('./dist/'));
 

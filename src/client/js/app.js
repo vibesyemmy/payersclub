@@ -1,6 +1,10 @@
 import angular from 'angular';
 import 'angular-ui-router';
 import 'angular-ui-bootstrap';
+import 'angular-gravatar';
+import 'angular-smart-table';
+import 'angular-socket-io';
+import 'angular-animate';
 
 // Import our app config files
 import constants  from './config/app.constants';
@@ -12,6 +16,7 @@ import './config/app.templates';
 
 import './layout';
 import './home';
+import './admin';
 import './auth';
 import './components';
 import './settings';
@@ -22,13 +27,18 @@ import './services';
 const requires = [
 	'ui.router',
 	'ui.bootstrap',
+	'ui.gravatar',
+  'ngAnimate',
+  'smart-table',
   'templates',
   'app.services',
   'app.layout',
   'app.components',
   'app.auth',
+  'app.admin',
   'app.home',
-  'app.settings'
+  'app.settings',
+  'btford.socket-io'
 ];
 
 // Mount on window for testing

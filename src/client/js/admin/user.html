@@ -1,0 +1,95 @@
+<div class="panel user-info">
+	<div class="panel-heading"><a href="#" ng-click="goBack()" class="pull-left">Back</a></div>
+	<div class="panel-body">
+		<h1></h1>
+		<div class="row">
+			<div class="col-md-4 panel panel-success panel-reset">
+        <div class="user-head">
+            <img ng-src="img/card-pattern.jpg" alt="">
+        </div>
+        <div class="panel-body">
+          <div class="user-desk">
+            <div class="avatar">
+                <img gravatar-src="$ctrl.user.email" alt="">
+            </div>
+            <div class="clearfix"></div>
+            <h4 class="text-uppercase">{{$ctrl.user.bkaccount_name}}</h4>
+            <span>{{$ctrl.user.username}} - {{$ctrl.user.email}}</span> <br/>
+            <span>{{$ctrl.user.bk_name}} - {{$ctrl.user.bkaccount_number}}</span><br/>
+            <span>&#8358;{{$ctrl.plan($ctrl.user.plan)}}</span>
+            <ul class="user-p-list">
+                <li ng-if="!$ctrl.user.isPaired" class="active"><a href="#">Auto Pair</a></li>
+                <li ng-if="!$ctrl.user.isPaired" class="active"><a href="#">Pair To</a></li>
+                <li ng-if="!$ctrl.user.isRecycled"><a href="#">Enable Recycle</a></li>
+                <li class="danger"><a href="#">Suspend</a></li>
+            </ul>
+          </div>
+        </div>
+    	</div>
+			<div class="col-md-7">
+				<h2>Pairing Info</h2>
+				
+				<!-- PH & Recycles -->
+				<div class="row state-overview state-alt">
+					<div class="col-sm-6">
+            <section class="panel b-border">
+              <div class="symbol ">
+                <span class="bg-danger"><i class="fa fa-money"></i></span>
+              </div>
+              <div class="value">
+                <h1>
+                    &#8358; 320
+                </h1>
+                <p>New Order Received</p>
+              </div>
+            </section>
+          </div>
+					<div class="col-sm-6">
+			      <section class="panel b-border">
+		          <div class="symbol ">
+		              <span class="bg-danger"><i class="fa fa-money"></i></span>
+		          </div>
+		          <div class="value ">
+		              <h1>
+		                  &#8358; 22,014
+		              </h1>
+		              <p>Dollar Profit Today</p>
+		          </div>
+			      </section>
+					</div>	
+				</div>
+
+				<!-- GH -->
+				<div class="row state-overview state-alt">
+					<div class="col-sm-6">
+            <section class="panel b-border">
+              <div class="symbol ">
+                <span class="bg-info"><i class="fa fa-money"></i></span>
+              </div>
+              <div class="value">
+                <h1>
+                    &#8358; 320
+                </h1>
+                <p>New Order Received</p>
+              </div>
+            </section>
+          </div>
+					<div class="col-sm-6">
+			      <section class="panel b-border">
+		          <div class="symbol ">
+		              <span class="bg-info"><i class="fa fa-money"></i></span>
+		          </div>
+		          <div class="value ">
+		              <h1>
+		                  &#8358; 22,014
+		              </h1>
+		              <p>Dollar Profit Today</p>
+		          </div>
+			      </section>
+					</div>					
+				</div>
+				<div class="row"></div>
+			</div>
+		</div>
+	</div>
+</div>

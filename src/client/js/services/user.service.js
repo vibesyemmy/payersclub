@@ -1,5 +1,5 @@
 class User {
-  constructor(Token, AppConstants, $http, $state, $q) {
+  constructor(Token, AppConstants, $http, $state, $q, $filter) {
     'ngInject';
 
     this._Token = Token;
@@ -9,7 +9,8 @@ class User {
     this._$q = $q;
 
     this.current = null;
-
+    this.users = null;
+    this.filter = $filter;
   }
 
 
@@ -77,10 +78,105 @@ class User {
     )
   }
 
+  getUsers(){
+    if (this.users) {
+      return this.users;
+    } else {
+      return this._$http({
+        method: "GET",
+        url: this._AppConstants.api + '/classes/_User/',
+        headers:{
+          'X-Parse-Application-Id': this._AppConstants.appId
+        }
+      }).then((res) =>{
+        this.users = res.data.results;
+        return res.data.results;
+      }).catch((err) =>{
+        return err;
+      });
+    }
+  }
+
+  pair(user) {
+    return this._$http({
+      method: 'POST',
+      url: this._AppConstants.api + '/functions/pair',
+      headers:{
+        'X-Parse-Application-Id': this._AppConstants.appId
+      },
+      data : {
+        uid : user.objectId
+      }
+    }).then((res) =>{
+      return this._$http({
+        method: "GET",
+        url: this._AppConstants.api + '/classes/_User/'+user.objectId,
+        headers:{
+          'X-Parse-Application-Id': this._AppConstants.appId
+        }
+      });
+    }).then((res) =>{
+      this.users = null;
+      this.getUsers();
+      return res.data;
+    }).catch((err) =>{
+      return err;
+    });
+  }
+
+  bump(user) {
+    return this._$http({
+      method: 'POST',
+      url: this._AppConstants.api + '/functions/bump',
+      headers:{
+        'X-Parse-Application-Id': this._AppConstants.appId
+      },
+      data : {
+        uid : user.objectId
+      }
+    }).then((res) =>{
+      return res.data;
+    }).catch((err) =>{
+      return err;
+    });
+  }
+
   logout() {
     this.current = null;
     this._Token.destroy();
     this._$state.go(this._$state.$current, null, { reload: true });
+  }
+
+  verifyAdmin() {
+    let deferred = this._$q.defer();
+
+    if (this.current.role == '0') {
+      deferred.resolve(true);
+    } else {
+      this._$http({
+        url: this._AppConstants.api + '/users/me?include=profile',
+        method: 'GET',
+        headers: {
+          'X-Parse-Application-Id': this._AppConstants.appId,
+          'X-Parse-Session-Token': this._Token.get()
+        }
+      }).then(
+        (res) => {
+          this.current = res.data;
+          if (this.current.role == '0') {
+            deferred.resolve(true);
+          } else {
+            deferred.resolve(false);
+          }
+        },
+
+        (err) => {
+          this._Token.destroy();
+          deferred.resolve(false);
+        }
+      )
+    }
+    return deferred.promise;
   }
 
   verifyAuth() {
@@ -134,6 +230,11 @@ class User {
     });
 
     return deferred.promise;
+  }
+
+  UserException(message) {
+    this.message = message;
+    this.name = 'UserException';
   }
 
 }
