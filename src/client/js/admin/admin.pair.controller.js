@@ -77,7 +77,7 @@ class AdminPairCtrl {
 					this.users.push(user);
 				}
 			}
-			// console.log(this.users, this.user);
+			console.log(this.users.length);
 			this.rs.stateLoading = false;
 		}).catch((err) =>{
 			console.log(err);
