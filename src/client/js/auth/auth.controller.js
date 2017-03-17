@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 class AuthCtrl {
-  constructor(User, $state) {
+  constructor(User, $state, Pair) {
     'ngInject';
 
     this._User = User;
@@ -10,6 +10,7 @@ class AuthCtrl {
     this.authType = $state.current.name.replace('app.', '');
     this.alert    = {};
     this.alert.show = false;
+    this.p = Pair;
 
   }
 
@@ -23,6 +24,8 @@ class AuthCtrl {
     this.formData.username = this.formData.username.toLowerCase(); 
     this._User.attemptAuth(this.authType, this.formData, this.plan).then(
       (res) => {
+        this.p.ph = null;
+        this.p.gh = null;
         this._$state.go('app.dash', null, { reload: true });
       },
       (err) => {
