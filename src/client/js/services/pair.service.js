@@ -46,7 +46,8 @@ class Pair {
 					'plan': plan,
 					'isPaired': false
 				}
-			}
+			},
+			limit: 999
 		}).then((res) =>{
 			return res.data.results;
 		}).catch((err) =>{
@@ -134,7 +135,8 @@ class Pair {
       	},
       	include: ['p1', 'p2', 'p3', 'p4', 'to'],
       	order:'-createdAt'
-      }
+      },
+			limit: 999
 		}).then((pairs) =>{
 			return pairs.data.results;
 		}).catch((err) =>{
