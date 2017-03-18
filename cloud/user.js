@@ -1,121 +1,205 @@
 /*jshint esversion: 6 */
+
+// Admin 0
+// fe 1
+// nu 2
+
 var _ = require("underscore");
 
 var client = require(__dirname + '/modules/nodemailer.js');
 
+var env = process.env.NODE_ENV || "dev";
+
 Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
 	var user = req.object;
-	var pUsername = user.get("username");
-	user.set("username", pUsername.toLowerCase());
-	user.set("pUsername", pUsername);
+
+	if(!user.has("role")) {
+		user.set("role", 2);
+	}
+
+	if (!user.has("can_benefit")) {
+		user.set("can_benefit", false);
+	}
+
+	if (!user.has("can_recycle")) {
+		user.set("can_recycle", false);
+	}
+
+	if (!user.has("benefit_count")) {
+		user.set("benefit_count", 0);
+	}
+
+	if (!user.has("plan_pending")) {
+		user.set("plan_pending", false);
+	}
 
 	res.success();
-})
 
-Parse.Cloud.afterSave(Parse.User, (req, res) =>{
-	var Pairing = Parse.Object.extend("Pairing"); 
+});
+
+Parse.Cloud.afterSave(Parse.User, (req, res) => {
 	var user = req.object;
-	var mailOptions = {
-    from: '"FxChange Admin" <no-reply@fxchange.club>', // sender address
-    // to: user.get("email"), // list of receivers
-    subject: 'Welcome ✔', // Subject line
-    text: createTextEmail(user), // plain text body
-    html: createHTMLEmail(user) // html body
-	};
+	var Box = Parse.Object.extend("Box");
 	if (!user.existed()) {
-		user.set("isPaired", false);
-		user.set("isRecycled", false);
-		return user.save(null,{useMasterKey: true}).then((u) =>{
-			// Create pairings for donors
-			var pairing = new Pairing();
-			pairing.set("to", u); 
-			pairing.set("plan", u.get("plan"));
-			pairing.set("eligible", false);
-			return pairing.save(null,{useMasterKey: true});
-		}).then((p) =>{
-			// Pair to other account to donate
-			/*
-			 * Check first pair query
-			 */
-		 	var q1 = new Parse.Query("Pairing");
-		 	q1.doesNotExist("p1");
-		 	q1.equalTo("eligible", true);
-
-		 	/*
-			 * Check second pair query
-			 */
-
-		 	var q2 = new Parse.Query("Pairing");
-		 	q2.doesNotExist("p2");
-		 	q2.equalTo("eligible", true);
-
-		 	/*
-			 * Check third pair query
-			 */
-
-		 	var q3 = new Parse.Query("Pairing");
-		 	q3.doesNotExist("p3");
-		 	q3.equalTo("eligible", true);
-
-		 	var mainQuery = Parse.Query.or(q1, q2, q3);
-		 	mainQuery.ascending("createdAt");
-
-		 	return mainQuery.first();
-		}).then((p) =>{
-			var env = process.env.NODE_ENV || "dev";
-			if (env === "dev") {
-				return res.success();
-			}
-			
-			if (!p) {
-				return sendEmail(user, mailOptions);
-			}
-
-			if (!p.get("p1")) {
-				p.set("p1", user);
-				return sendEmail(user, mailOptions);
-			} else if (!p.get("p1")){
-				p.set("p2", user);
-				return sendEmail(user, mailOptions);
-			} 
-			p.set("p3", user);
-			return sendEmail(user, mailOptions);
-		}).then((info) =>{
+		if (env === "dev") {
+			return res.success();
+		}
+		sendEmail(user, getMailOptions(user)).then((info) =>{
 			return res.success(info);
+		});
+
+	}
+
+	// Match after donating
+	if (user.get("can_benefit")) {
+		// Donor query
+		var dq = new Parse.Query(Parse.User);
+		dq.equalTo("plan_pending", false);
+		dq.equalTo("can_benefit", false);
+		dq.equalTo("plan", user.get("plan"));
+
+		// Recycle Query
+		var rq1 = new Parse.Query(Parse.User);
+		rq1.greaterThanOrEqualTo("benefit_count", 2);
+		rq1.notEqualTo("objectId", user.id);
+		rq1.equalTo("plan", user.get("plan"));
+
+		var mainQ = Parse.Query.or(dq, rq1);
+		mainQ.descending("createdAt");
+		mainQ.limit(2);
+
+		return mainQ.find().then((dq) =>{
+			var promises = [];
+			donors = dq;
+			for (var i = 0; i < 2; i++) {
+				var box = new Box();
+
+				box.set("beneficiary", user);
+				box.set("donor", donors[i]);
+				box.set("confirmation_status", 0);
+				box.set("timer_status", 0);
+				promises.push(box.save());
+			}
+			return Parse.Promise.when(promises);
+		}).then(() =>{
+			return res.success();
 		}).catch((err) =>{
 			return res.error(err);
 		});
 	}
 });
 
-Parse.Cloud.job('purgePairs', (req, stat) =>{
-	// the params passed through the start request
-  var params = req.params;
-  // Headers from the request that triggered the job
-  var headers = req.headers;
+Parse.Cloud.job('doPairLoop10k', (req, stat) =>{
+	var beneficiaries = [];
+	var donors = [];
+	var dc = 0;
+	var promises = [];
 
-  // get the parse-server logger
-  var log = req.log;
+	var Box = Parse.Object.extend("Box");
 
-  // Update the Job status message
-  stat.message("I just started");
-  var p = new Parse.Query("Pairing");
+	// Beneficiary query
+	var bq = new Parse.Query(Parse.User);
+	bq.lessThanOrEqualTo("benefit_count", 2);
+	bq.equalTo("plan_pending", false);
+	bq.equalTo("can_benefit", true);
+	bq.descending("createdAt");
+	bq.equalTo("plan", "1");
 
-  p.find().then((px) =>{
-  	var promises = [];
+	// Donor query
+	var dq = new Parse.Query(Parse.User);
+	dq.equalTo("plan_pending", false);
+	dq.equalTo("can_benefit", false);
+	dq.descending("createdAt");
+	dq.equalTo("plan", "1");
 
-  	for (var i = 0; i < px.length; i++) {
-  		promises.push(px[i].destroy());
-  	}
+	bq.find().then((users) =>{
+		beneficiaries = users;
+		var donor_count = beneficiaries.length * 2;
+		dq.limit(donor_count);
+		dq.descending("createdAt");
+		return dq.find();
+	}).then((dq) =>{
+		donors = dq;
 
-  	return Parse.Promise.when(promises);
-  }).then(() =>{
-  	stat.success("Done!");
-  }).catch((err) =>{
-  	stat.error(err);
-  });
+		// Loop through benx 
+		// Confirmation Status
+		// 0 = unconfirmed
+		// 1 = has proof of payment
+		// 2 = transaction complete
+		// 3 = Box discarded
+
+		// Timer Status
+		// 
+		// 0 = Donor timer
+		// 1 = Benex timer
+		// 
+		// Max time for whole transaction 5 hours
+		// Donor 2 hours
+		// Benex 3 hours
+		// Check with cron job hourly  
+		var c = 0;
+		for (var i = 0; i < beneficiaries.length; i++) {
+			for (var i2 = 0; i2 < 2; i2++) {
+				console.log(i, c);
+				var benex = beneficiaries[i];
+				var donor = donors[c];
+
+
+
+				var box = new Box();
+
+				box.set("beneficiary", benex);
+				box.set("donor", donor);
+				box.set("confirmation_status", 0);
+				box.set("timer_status", 0);
+
+				promises.push(box.save());
+				c++;
+			}
+		}
+
+		return Parse.Promise.when(promises);
+	}).then(() =>{
+		return stat.success();
+	}).catch((err) =>{
+		return stat.error(err);
+	});
 });
 
+// Parse.Cloud.afterSave(Parse.User, (req, res) =>{
+// 	var Pairing = Parse.Object.extend("Pairing"); 
+// 	var user = req.object;
+// 	var mailOptions = {
+    
+// 	if (!user.existed()) {
+// 		user.set("isPaired", false);
+// 		user.set("isRecycled", false);
+
+// 		return user.save(null,{useMasterKey: true}).then((u) =>{
+// 		}).then((p) =>{
+// 			var env = process.env.NODE_ENV || "dev";
+// 			return sendEmail(user, mailOptions);
+// 		}).then((info) =>{
+// 			return res.success(info);
+// 		}).catch((err) =>{
+// 			return res.error(err);
+// 		});
+// 	}
+// });
+
+
+
+function getMailOptions(user) {
+	let opt = {
+		from: '"FxChange Admin" <no-reply@fxchange.club>', // sender address
+    // to: user.get("email"), // list of receivers
+    subject: 'Welcome ✔', // Subject line
+    text: createTextEmail(user), // plain text body
+    html: createHTMLEmail(user) // html body
+	};
+
+	return opt;
+}
 
 
 function sendEmail(user, opts) {

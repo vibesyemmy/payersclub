@@ -1,14 +1,13 @@
 /*jshint esversion: 6 */
 
 class GHCtrl {
-	constructor(Pair, Alert, $rootScope, UploadService, User, Token){
+	constructor($rootScope, UploadService, Box){
 		'ngInject';
-		this.plan;
-		this.alert = Alert;
-		this.pair  = Pair;
 		this.rs = $rootScope;
 		this.up = UploadService;
-		this.current = User.current;
+		this.boxService = Box;
+
+		console.log(this.box);
 	}
 
 	setPlan(p) {
@@ -26,10 +25,8 @@ class GHCtrl {
 	}
 
 	confirm(){
-		// console.log(this.current.objectId, this.user.objectId, this.txid);
-		this.alert.confirmTx(this.current.objectId, this.user.objectId, this.txid).then((res) =>{
-			console.log(res);
-			window.location = "/";
+		this.boxService.confirmTx(this.box.objectId).then((res) =>{
+			this.box.confirmation_status = 2;
 		});
 	}
 
@@ -40,11 +37,8 @@ class GHCtrl {
 
 let GH = {
 	bindings : {
-		user: '=',
+		box: '=',
 		type: '=',
-		txid: '=',
-		position: '=',
-		plan: '='
 	},
 	controller: GHCtrl,
 	templateUrl: 'components/card/card.html'

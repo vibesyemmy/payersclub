@@ -100,50 +100,6 @@ class User {
     }
   }
 
-  pair(user) {
-    return this._$http({
-      method: 'POST',
-      url: this._AppConstants.api + '/functions/pair',
-      headers:{
-        'X-Parse-Application-Id': this._AppConstants.appId
-      },
-      data : {
-        uid : user.objectId
-      }
-    }).then((res) =>{
-      return this._$http({
-        method: "GET",
-        url: this._AppConstants.api + '/classes/_User/'+user.objectId,
-        headers:{
-          'X-Parse-Application-Id': this._AppConstants.appId
-        }
-      });
-    }).then((res) =>{
-      this.users = null;
-      this.getUsers();
-      return res.data;
-    }).catch((err) =>{
-      return err;
-    });
-  }
-
-  bump(user) {
-    return this._$http({
-      method: 'POST',
-      url: this._AppConstants.api + '/functions/bump',
-      headers:{
-        'X-Parse-Application-Id': this._AppConstants.appId
-      },
-      data : {
-        uid : user.objectId
-      }
-    }).then((res) =>{
-      return res.data;
-    }).catch((err) =>{
-      return err;
-    });
-  }
-
   logout() {
     this.current = null;
     this._Token.destroy();

@@ -1,18 +1,12 @@
 /*jshint esversion: 6 */
 
 class PHCtrl {
-	constructor(Pair, Alert, $rootScope, UploadService, User, Token){
+	constructor($rootScope, UploadService, Box, User){
 		'ngInject';
-		this.plan;
-		this.alert = Alert;
-		this.pair  = Pair;
 		this.rs = $rootScope;
 		this.up = UploadService;
-		this.current = User.current;
-		this.token = Token;
-		this.awaiting = Token.getAwaitingPH();
-
-		console.log(this.awaiting);
+		this.boxService = Box;
+		this.user = User.current;
 	}
 
 	setPlan(p) {
@@ -29,15 +23,7 @@ class PHCtrl {
 		return ppp;
 	}
 
-	// ph(user){
-	// 	this.alert.createConfirmation(user.objectId).then((res) =>{
-	// 		console.log(res);
-	// 	});
-	// }
-
 	upload(){
-		// return this.myFile;
-		// console.log(this.myFile);
 		var file = this.myFile;
 		this.rs.stateLoading = true;
 		this.up.init(file).then((file) =>{
@@ -46,21 +32,24 @@ class PHCtrl {
         "name"   : file.name,
         "url"    : file.url
       };
-      return this.alert.createConfirmation(this.user.objectId, this.current.objectId, f, this.txid);
+      return this.boxService.updatePop(this.box.objectId, f);
 		}).then((res) =>{
-			this.awaiting = true;
-			this.token.saveAwaitingPH(true);
+			this.box.confirmation_status = 1;
 			this.rs.stateLoading = false;
+		});
+	}
+
+	decline() {
+		this.boxService.decline(this.box.objectId).then((res) =>{
+			window.location = "/";
 		});
 	}
 }
 
 let PH = {
 	bindings : {
-		user: '=',
+		box: '=',
 		type: '=',
-		txid: '=',
-		plan: '=',
 		file: '&'
 	},
 	controller: PHCtrl,

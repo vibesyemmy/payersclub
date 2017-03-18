@@ -1,11 +1,11 @@
 /*jshint esversion: 6 */
 class DashCtrl{
-	constructor(ph, gh, user, $scope, SocketIO, UploadService, toaster, $state, Alert){
+	constructor(benex, donor, $scope, SocketIO, UploadService, toaster, $state, Alert, User){
 		'ngInject';
 
-		this.ph 			= ph;
-		this.pair 		= gh;
-		this.user			= user;
+		this.benex    = benex;
+		this.donor 		= donor;
+		this.user			= User.current;
 		this._$scope 	= $scope;
 		this.up 			= UploadService;
 		this.io 			= SocketIO;
@@ -17,8 +17,7 @@ class DashCtrl{
 		this.alert.show	= false;
 		this.init();
 
-		console.log(this.ph, this.pair);
-
+		console.log(this.benex, this.donor);
 
 	}
 
@@ -41,6 +40,7 @@ class DashCtrl{
 	}
 
 	init() {
+
 		let u = {
 			id: this.user.objectId,
 			username: this.user.username
@@ -64,46 +64,19 @@ class DashCtrl{
 					this.alert.type = "warning";
 					this.alert.msg 	= "You have an incoming transaction. Close this message to refresh you page";
 					this.alert.show	= true;
-					console.log(alert);
 				}
 			});
 			this.io.on('incoming_tx_confirm', (confirm) =>{
+
+				// Be smarter!!!!!!!
+				// Get the transaction id and perform an update on local instance of box 
+				// IN THE BOX SERVICE
+
 				if (confirm.fromUserId == this.user.objectId) {
 					this.alert.type = "success";
 					this.alert.msg 	= "Your transaction has been confirmed.";
 					this.alert.show	= true;
 				}
-
-				console.log(confirm);
-
-				var pos;
-
-				var to1 = this.pair.p1;
-				var to2 = this.pair.p2;
-				var to3 = this.pair.p3;
-				var to4 = this.pair.p4;
-
-				if (to1 && to1.objectId === confirm.fromUserId) {
-					this.pair.confirmedP1 = true;
-					pos = 1;
-				}
-
-				if (to2 && to2.objectId === confirm.fromUserId) {
-					this.pair.confirmedP2 = true;
-					pos = 2;
-				}
-
-				if (to3 && to3.objectId === confirm.fromUserId) {
-					this.pair.confirmedP3 = true;
-					pos = 3;
-				}
-				if (to4 && to4.objectId === confirm.fromUserId) {
-					this.pair.confirmedP4 = true;
-					pos = 4;
-				}
-				this.a.updatePair(confirm.txId, confirm.fromUserId, confirm.toUserId, pos).then((res) =>{
-					window.location = "/";
-				});
 
 			});
 		});

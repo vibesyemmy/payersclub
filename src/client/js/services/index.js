@@ -24,4 +24,10 @@ servicesModule.service('UploadService', UploadService);
 import AlertService from './alert.service';
 servicesModule.service('Alert', AlertService);
 
+import BoxService from './box.service';
+servicesModule.service('Box', BoxService);
+
+import News from './box.service';
+servicesModule.service('News', News);
+
 export default servicesModule;

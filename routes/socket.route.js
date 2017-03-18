@@ -21,21 +21,8 @@ let returnRouter = (io) =>{
 module.exports = returnRouter;
 
 function confirmTx(req, res) {
-	var txId = req.body.txId;
-	var fromUserId = req.body.fromUserId;
-	var toUserId = req.body.toUserId;
-	var confirm = req.body.confirm;
 
-	let tx = {
-		txId: txId,
-		fromUserId: fromUserId,
-		toUserId: toUserId,
-		confirm: confirm
-	}
-
-	console.log(tx);
-
-	sio.sockets.emit("incoming_tx_confirm", tx);
+	sio.sockets.emit("incoming_tx_confirm", {});
 	res.status(200).json({ message: "Tx Confirmation received" });
 }
 

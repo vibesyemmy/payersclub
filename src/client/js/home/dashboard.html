@@ -4,7 +4,7 @@
   		<div class="sb col-md-4">
   			<div class="panel panel-info">
   				<div class="panel-heading">
-  					<h3 class="panel-title">News / Announcement </h3>
+  					<h3 class="panel-title">News / Testimonials </h3>
   				</div>
   				<div class="panel-body">
   					<ul>
@@ -17,25 +17,37 @@
   				</div>
   			</div>
   		</div>
-  		<div class="ct col-md-7">
+  		<div class="ct col-md-7 panel panel-default" style="min-height: 420px;">
         <div class="row">
-          <div uib-alert ng-show="$ctrl.alert.show" ng-class="'alert-' + (alert.type || 'warning')" close="$ctrl.closeAlert()">{{$ctrl.alert.msg}}</div>
+          <div uib-alert ng-show="$ctrl.alert.show" class="col-md-5" ng-class="'alert-' + (alert.type || 'warning')" close="$ctrl.closeAlert()">{{$ctrl.alert.msg}}</div>
+          <a ui-sref="app.change" ng-if="$ctrl.user.plan_pending" class="btn btn-lg pull-right">Change Plan</a>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 panel panel-success panel-reset">
+            <div class="user-head">
+                <img ng-src="img/card-pattern.jpg" alt="">
+            </div>
+            <div class="panel-body">
+              <div class="user-desk">
+                <div class="avatar">
+                    <img gravatar-src="$ctrl.user.email" alt="">
+                </div>
+                <div class="clearfix"></div>
+                <h4 class="text-uppercase">Matching In Progress</h4>
+                <ul class="user-p-list">
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
   			
         <div class="row">
-	  			<provide-help-card file="$ctrl.upload(file)" ng-if="$ctrl.ph" txid="$ctrl.ph.objectId" plan="$ctrl.ph.plan" user="$ctrl.ph.to" type=0 class="panel panel-default card col-md-4"></provide-help-card>  			
+	  			<provide-help-card file="$ctrl.upload(file)" type=0 class="panel panel-default card col-md-4" ng-repeat="b in $ctrl.benex" box="b" ng-if="b.confirmation_status != 2"></provide-help-card>  			
   			</div>
   			
-        <div ng-if="$ctrl.pair" class="row" style="margin-top: 45px;">
-	  			<get-help-card ng-if="!$ctrl.pair.confirmedP1 && $ctrl.pair.p1" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p1" txid="$ctrl.pair.objectId" position="p1" user="$ctrl.pair.p1" type=1 class="panel panel-info card col-md-4"></get-help-card>
-	  			
-          <get-help-card ng-if="!$ctrl.pair.confirmedP2 && $ctrl.pair.p2" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p2" txid="$ctrl.pair.objectId" position="p2" user="$ctrl.pair.p2" type=1 class="panel panel-info card col-md-4"></get-help-card>
-
-          <get-help-card ng-if="$ctrl.pair.p3.isRecycled && $ctrl.pair.p3" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p3" txid="$ctrl.pair.objectId" position="p3" user="$ctrl.pair.p3" type=1 class="panel panel-info card col-md-4"></get-help-card>
-
-          <get-help-card ng-if="$ctrl.pair.p4.isRecycled && $ctrl.pair.p4" plan="$ctrl.pair.plan" ng-if="$ctrl.pair.p4" txid="$ctrl.pair.objectId" position="p4" user="$ctrl.pair.p4" type=1 class="panel panel-info card col-md-4"></get-help-card>
-  				<recycle-card ng-if="$ctrl.pair.p3.isRecycled" class="panel panel-danger card col-md-4"></recycle-card>
-  				<recycle-card ng-if="$ctrl.pair.p4.isRecycled" class="panel panel-danger card col-md-4"></recycle-card>
+        <div class="row" style="margin-top: 45px;">
+	  			<get-help-card class="panel panel-info card col-md-4" type=1 ng-repeat="b in $ctrl.donor" box="b" ng-if="d.confirmation_status != 2"></get-help-card>
   			</div>
   		</div>
   	</div>

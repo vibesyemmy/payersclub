@@ -1,3 +1,7 @@
 <div class="panel-body">
 	<h2 class="box-title"> Recycle to open</h2>
 </div>
+<div class="card-overlay" ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 1">
+	<h4>Awaiting Match</h4>
+  <div class="loader">Loading...</div>
+</div>

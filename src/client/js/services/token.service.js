@@ -10,14 +10,6 @@ class Token {
     this._$window.localStorage[this._AppConstants.sessionToken] = token;
   }
 
-  saveAwaitingPH(bool) {
-    this._$window.localStorage['awaitingPh'] = 1;
-  }
-
-  getAwaitingPH() {
-    return this._$window.localStorage['awaitingPh'] == 1 ? true : false; 
-  }
-
   get() {
     return this._$window.localStorage[this._AppConstants.sessionToken];
   }

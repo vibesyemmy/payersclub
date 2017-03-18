@@ -1738,6 +1738,12 @@ pre {
 
 .card-overlay h4 {
   position: absolute;
-  top: 65px;
+  top: 16%;
   left: 43px;
+}
+
+.card-overlay p {
+  position: absolute;
+  top: 75%;
+  left: 25%
 }

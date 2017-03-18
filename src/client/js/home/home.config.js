@@ -16,23 +16,25 @@ function HomeConfig($stateProvider) {
     templateUrl: 'home/dashboard.html',
     title: 'Dashboard',
     resolve: {
-      ph: function(Pair) {
-        return Pair.provideHelp().then((val) =>{
+      donor: (Box, User) => {
+        return Box.getBenex(User.current.objectId).then((val) =>{
           return val;
         });
       },
-      gh: function(Pair) {
-        return Pair.getHelp().then((val) =>{
+      benex: (Box, User) => {
+        return Box.getDonors(User.current.objectId).then((val) =>{
           return val;
         });
-      },
-      user: function(User){
-        return User.current;
       }
     }
   }).state('app.faq',{
     url: '/faq',
     templateUrl: 'home/faq.html'
+  }).state('app.change',{
+    url: '/change',
+    controller: 'ChangePlan',
+    controllerAs: '$ctrl',
+    templateUrl: 'components/modal/modal.html'
   });
 
 };

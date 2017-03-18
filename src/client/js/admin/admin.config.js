@@ -35,14 +35,6 @@ function AdminConfig($stateProvider) {
       user: (users, $stateParams, $filter) =>{
         var user = $filter('filter')(users, (d) =>{ return d.objectId === $stateParams.id; })[0];
         return user;
-      },
-      ph: (users, $stateParams, $filter, Pair) => {
-        var user = $filter('filter')(users, (d) =>{ return d.objectId === $stateParams.id; })[0];
-        return Pair.getProvideHelp(user);
-      },
-      gh: (users, $stateParams, $filter, Pair) => {
-        var user = $filter('filter')(users, (d) =>{ return d.objectId === $stateParams.id; })[0];
-        return Pair.getGetHelp(user);
       }
     },
     controller: 'AdminUserCtrl as $ctrl'
@@ -51,16 +43,7 @@ function AdminConfig($stateProvider) {
     controller: 'AdminPairsCtrl',
     controllerAs: '$ctrl',
     templateUrl: 'admin/pairs.html',
-    title: 'Pair',
-    resolve: {
-      users: (Pair, $stateParams) =>{
-        var id = $stateParams.plan;
-        return Pair.getUsersByPlan(id);
-      },
-      plan: ($stateParams) => {
-        return $stateParams.plan;
-      }
-    }
+    title: 'Pair'
   }).state('app.admin.dash.pairs.pair', {
     url: '/:id',
     controller: 'AdminPairCtrl',
