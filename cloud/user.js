@@ -10,6 +10,8 @@ var client = require(__dirname + '/modules/nodemailer.js');
 
 var env = process.env.NODE_ENV || "dev";
 
+var Box = Parse.Object.extend("Box");
+
 Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
 	var user = req.object;
 
@@ -31,6 +33,22 @@ Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
 
 	if (!user.has("plan_pending")) {
 		user.set("plan_pending", false);
+	} 
+
+	if (!user.has("plan")) {
+		user.set("plan", "1");
+	}
+
+	if (!user.has("in_box")) {
+		user.set("in_box", false);
+	}
+
+	if (!user.has("in_box_count")) {
+		user.set("in_box_count", 0);
+	}
+
+	if (!user.get("can_benefit") && user.get("in_box_count") > 1) {
+		res.error("Donors cannot be in multiple boxes");
 	}
 
 	res.success();
@@ -39,7 +57,6 @@ Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
 
 Parse.Cloud.afterSave(Parse.User, (req, res) => {
 	var user = req.object;
-	var Box = Parse.Object.extend("Box");
 	if (!user.existed()) {
 		if (env === "dev") {
 			return res.success();
@@ -47,147 +64,8 @@ Parse.Cloud.afterSave(Parse.User, (req, res) => {
 		sendEmail(user, getMailOptions(user)).then((info) =>{
 			return res.success(info);
 		});
-
-	}
-
-	// Match after donating
-	if (user.get("can_benefit")) {
-		// Donor query
-		var dq = new Parse.Query(Parse.User);
-		dq.equalTo("plan_pending", false);
-		dq.equalTo("can_benefit", false);
-		dq.equalTo("plan", user.get("plan"));
-
-		// Recycle Query
-		var rq1 = new Parse.Query(Parse.User);
-		rq1.greaterThanOrEqualTo("benefit_count", 2);
-		rq1.notEqualTo("objectId", user.id);
-		rq1.equalTo("plan", user.get("plan"));
-
-		var mainQ = Parse.Query.or(dq, rq1);
-		mainQ.descending("createdAt");
-		mainQ.limit(2);
-
-		return mainQ.find().then((dq) =>{
-			var promises = [];
-			donors = dq;
-			for (var i = 0; i < 2; i++) {
-				var box = new Box();
-
-				box.set("beneficiary", user);
-				box.set("donor", donors[i]);
-				box.set("confirmation_status", 0);
-				box.set("timer_status", 0);
-				promises.push(box.save());
-			}
-			return Parse.Promise.when(promises);
-		}).then(() =>{
-			return res.success();
-		}).catch((err) =>{
-			return res.error(err);
-		});
 	}
 });
-
-Parse.Cloud.job('doPairLoop10k', (req, stat) =>{
-	var beneficiaries = [];
-	var donors = [];
-	var dc = 0;
-	var promises = [];
-
-	var Box = Parse.Object.extend("Box");
-
-	// Beneficiary query
-	var bq = new Parse.Query(Parse.User);
-	bq.lessThanOrEqualTo("benefit_count", 2);
-	bq.equalTo("plan_pending", false);
-	bq.equalTo("can_benefit", true);
-	bq.descending("createdAt");
-	bq.equalTo("plan", "1");
-
-	// Donor query
-	var dq = new Parse.Query(Parse.User);
-	dq.equalTo("plan_pending", false);
-	dq.equalTo("can_benefit", false);
-	dq.descending("createdAt");
-	dq.equalTo("plan", "1");
-
-	bq.find().then((users) =>{
-		beneficiaries = users;
-		var donor_count = beneficiaries.length * 2;
-		dq.limit(donor_count);
-		dq.descending("createdAt");
-		return dq.find();
-	}).then((dq) =>{
-		donors = dq;
-
-		// Loop through benx 
-		// Confirmation Status
-		// 0 = unconfirmed
-		// 1 = has proof of payment
-		// 2 = transaction complete
-		// 3 = Box discarded
-
-		// Timer Status
-		// 
-		// 0 = Donor timer
-		// 1 = Benex timer
-		// 
-		// Max time for whole transaction 5 hours
-		// Donor 2 hours
-		// Benex 3 hours
-		// Check with cron job hourly  
-		var c = 0;
-		for (var i = 0; i < beneficiaries.length; i++) {
-			for (var i2 = 0; i2 < 2; i2++) {
-				console.log(i, c);
-				var benex = beneficiaries[i];
-				var donor = donors[c];
-
-
-
-				var box = new Box();
-
-				box.set("beneficiary", benex);
-				box.set("donor", donor);
-				box.set("confirmation_status", 0);
-				box.set("timer_status", 0);
-
-				promises.push(box.save());
-				c++;
-			}
-		}
-
-		return Parse.Promise.when(promises);
-	}).then(() =>{
-		return stat.success();
-	}).catch((err) =>{
-		return stat.error(err);
-	});
-});
-
-// Parse.Cloud.afterSave(Parse.User, (req, res) =>{
-// 	var Pairing = Parse.Object.extend("Pairing"); 
-// 	var user = req.object;
-// 	var mailOptions = {
-    
-// 	if (!user.existed()) {
-// 		user.set("isPaired", false);
-// 		user.set("isRecycled", false);
-
-// 		return user.save(null,{useMasterKey: true}).then((u) =>{
-// 		}).then((p) =>{
-// 			var env = process.env.NODE_ENV || "dev";
-// 			return sendEmail(user, mailOptions);
-// 		}).then((info) =>{
-// 			return res.success(info);
-// 		}).catch((err) =>{
-// 			return res.error(err);
-// 		});
-// 	}
-// });
-
-
 
 function getMailOptions(user) {
 	let opt = {
@@ -200,7 +78,6 @@ function getMailOptions(user) {
 
 	return opt;
 }
-
 
 function sendEmail(user, opts) {
 	opts.to = user.get("email");
@@ -246,4 +123,25 @@ function createHTMLEmail(user) {
 	html += "<p>Follow this link to join our WhatsApp group: <a href=\"https://chat.whatsapp.com/ECufYC9rdEG1jATrMTELXP\">https://chat.whatsapp.com/ECufYC9rdEG1jATrMTELXP</a><p>";
 
 	return html;
+}
+
+function matchToBeneficiaryOnSignup(user) {
+	var donor = user;
+	var benexQ = new Parse.Query(Parse.User);
+	benexQ.lessThan("in_box_count", 2);
+	benexQ.equalTo("can_benefit", true);
+	benexQ.equalTo("can_recycle", true);
+	benexQ.equalTo("plan", user.get("plan"));
+	benexQ.descending("createdAt");
+
+	return benexQ.first().then((user) =>{
+		var box = new Box();
+
+		box.set("beneficiary", user);
+		box.set("donor", donor);
+		box.set("confirmation_status", 0);
+		box.set("timer_status", 0);
+
+		return box.save()
+	});
 }

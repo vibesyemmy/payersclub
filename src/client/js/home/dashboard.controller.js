@@ -1,19 +1,19 @@
 /*jshint esversion: 6 */
 class DashCtrl{
-	constructor(benex, donor, $scope, SocketIO, UploadService, toaster, $state, Alert, User){
+	constructor(benex, donors, $scope, SocketIO, UploadService, toaster, $state, Alert, User){
 		'ngInject';
 
-		this.benex    = benex;
-		this.donor 		= donor;
-		this.user			= User.current;
-		this._$scope 	= $scope;
-		this.up 			= UploadService;
-		this.io 			= SocketIO;
-		this.news 		= [];
-		this.toastr 	= toaster;
-		this.state 		= $state;
-		this.a = Alert;
-		this.alert 		= {};
+		this.benex      = benex;
+		this.donors 		= donors;
+		this.user				= User.current;
+		this._$scope 		= $scope;
+		this.up 				= UploadService;
+		this.io 				= SocketIO;
+		this.news 			= [];
+		this.toastr 		= toaster;
+		this.state 			= $state;
+		this.a 					= Alert;
+		this.alert 			= {};
 		this.alert.show	= false;
 		this.init();
 

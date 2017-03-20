@@ -7,6 +7,9 @@ class GHCtrl {
 		this.up = UploadService;
 		this.boxService = Box;
 
+		this.rs.has_donors = true;
+		this.rs.has_benex = false;
+
 		console.log(this.box);
 	}
 
@@ -27,6 +30,7 @@ class GHCtrl {
 	confirm(){
 		this.boxService.confirmTx(this.box.objectId).then((res) =>{
 			this.box.confirmation_status = 2;
+			
 		});
 	}
 

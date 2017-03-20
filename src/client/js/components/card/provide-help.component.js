@@ -7,6 +7,9 @@ class PHCtrl {
 		this.up = UploadService;
 		this.boxService = Box;
 		this.user = User.current;
+
+		this.rs.has_donors = false;
+		this.rs.has_benex = true;
 	}
 
 	setPlan(p) {

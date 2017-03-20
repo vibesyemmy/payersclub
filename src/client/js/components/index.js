@@ -35,4 +35,19 @@ componentsModule.component('recycleCard', Recycle);
 import Wysiwyg from './wysiwyg5/wysiwyg.directive.js';
 componentsModule.directive('richTextEditor', Wysiwyg);
 
+import Portlet from './portlet.directive.js';
+componentsModule.directive('pgPortlet', Portlet);
+
+import DashNav from './dashnav/dashnav.component.js';
+componentsModule.component('dashNav', DashNav);
+
+import TxHistory from './card/tx.component.js';
+componentsModule.component('txHistory', TxHistory);
+
+import Logout from './logout.component.js';
+componentsModule.component('logout', Logout);
+
+import Hambuger from './hambuger.directive';
+componentsModule.directive('hambuger', Hambuger);
+
 export default componentsModule;

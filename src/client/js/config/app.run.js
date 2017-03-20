@@ -13,9 +13,20 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
     $rootScope.pageTitle += AppConstants.appName;
   };
 
+  $rootScope.getStyle = (style) => {
+    $rootScope.style = '/vendor.min.css';
+    if (style) {
+      $rootScope.style = style;
+    }
+  }
+
   $rootScope.goBack = () => {
     $window.history.back();
   };
+
+  $rootScope.logout = ()=> {
+    User.logout.bind(User);
+  }
 
   $rootScope.$on('$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) {
       $rootScope.stateLoading = true;
@@ -24,8 +35,11 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
       var isHome      = toState.name === "app.home";
       var isFAQ       = toState.name === "app.faq";
       var is404       = toState.name === "app.404";
+      var dash        = toState.name === "dash";
+      var dashMain    = toState.name === "dash.main";
 
       if (isLogin || isRegister || isHome || isFAQ || is404) {
+        $rootScope.theme = 'site';
         return;
       }
 
@@ -33,12 +47,19 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
         e.preventDefault();
         $state.go('app.login');
       }
+
+      if (dash || dashMain) {
+        $rootScope.theme = 'dash';
+      } else {
+        $rootScope.theme = 'site';
+      }
   });
 
   // change page title based on state
   $rootScope.$on('$stateChangeSuccess', (event, toState) => {
     $rootScope.setPageTitle(toState.title);
     $rootScope.stateLoading = false;
+    $rootScope.getStyle(toState.style);
   });
 }
 

@@ -1,0 +1,18 @@
+{
+  "name": "payersclub",
+  "description": "Payersclub",
+  "main": "index.js",
+  "authors": [
+    "Thompson Edolo <verygreenboi@live.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/CodeHaven9ja/payersclub",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src/client/vendor/bower"
+  ]
+}

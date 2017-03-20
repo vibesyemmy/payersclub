@@ -23,7 +23,8 @@ class AuthCtrl {
     this.formData.username = this.formData.username.toLowerCase(); 
     this._User.attemptAuth(this.authType, this.formData, this.plan).then(
       (res) => {
-        this._$state.go('app.dash', null, { reload: true });
+        // this._$state.go('dash', null, { reload: true });
+        window.location = "/";
       },
       (err) => {
         console.log(err);

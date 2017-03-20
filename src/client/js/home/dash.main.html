@@ -1,0 +1,16 @@
+<growl message="$ctrl.message"></growl>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+			<recycle-card></recycle-card>
+		</div>
+		<div class="col-md-8">
+			<tx-history></tx-history>
+		</div>
+	</div>
+
+	<div class="row">
+		<provide-help-card file="$ctrl.upload(file)" class="col-md-4" type=0 box="$ctrl.benex" ng-if="$ctrl.benex && $ctrl.benex.confirmation_status < 2"></provide-help-card> 
+		<get-help-card class="col-md-4" type=1 ng-repeat="b in $ctrl.donors" box="b" ng-if="$ctrl.donors && b.confirmation_status < 2"></get-help-card>
+	</div>
+</div>

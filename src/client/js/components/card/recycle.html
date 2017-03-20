@@ -1,7 +1,17 @@
-<div class="panel-body">
-	<h2 class="box-title"> Recycle to open</h2>
-</div>
-<div class="card-overlay" ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 1">
-	<h4>Awaiting Match</h4>
-  <div class="loader">Loading...</div>
+<div class="card card-user" ng-init="$ctrl.setType()">
+	<div class="image">
+	  <img ng-src="img/card-pattern.jpg" alt="...">
+	</div>
+	<div class="content">
+		<div class="author">
+			<img gravatar-src="$ctrl.user.email" class="avatar border-gray">
+
+			<h4 class="title" ng-bind="$ctrl.user.bkaccount_name"><br>
+			   <small ng-bind="$ctrl.user.username"></small>
+			</h4>
+			<p class="description">Plan: &#8358; {{$ctrl.setPlan($ctrl.user.plan)}}</p>
+			<p class="description">Member Since: {{$ctrl.user.createdAt | date:'medium'}}</p>
+			<p class="description" ng-bind="$ctrl.getMessage()"></p>
+		</div>
+	</div>
 </div>

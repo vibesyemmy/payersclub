@@ -11,7 +11,7 @@ class HomeCtrl {
     };
 
     if (User.current) {
-      $state.go('app.dash');
+      $state.go('dash.main');
     }
 
     

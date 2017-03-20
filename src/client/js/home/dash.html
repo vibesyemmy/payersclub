@@ -1,0 +1,48 @@
+<div class="wrapper">
+  <div class="sidebar" data-color="orange" data-image="/dashboard/img/sidebar-5.jpg">
+    <div class="sidebar-wrapper">
+          <div class="logo">
+              <a ui-serf="dash" class="simple-text">
+                  FXChange Club
+              </a>
+          </div>
+
+          <ul class="nav">
+              <li ui-sref-active="active">
+                  <a ui-sref="dash">
+                      <i class="pe-7s-graph"></i>
+                      <p>Dashboard</p>
+                  </a>
+              </li>
+              <li ui-sref-active="active">
+                  <a href="user.html">
+                      <i class="pe-7s-user"></i>
+                      <p>User Profile</p>
+                  </a>
+              </li>
+              <li ui-sref-active="active">
+                  <a href="table.html">
+                      <i class="pe-7s-note2"></i>
+                      <p>Transaction History</p>
+                  </a>
+              </li>
+              <li ui-sref-active="active">
+                  <a href="typography.html">
+                      <i class="pe-7s-news-paper"></i>
+                      <p>News</p>
+                  </a>
+              </li>
+              <li ui-sref-active="active">
+                  <a href="notifications.html">
+                      <i class="pe-7s-bell"></i>
+                      <p>Notifications</p>
+                  </a>
+              </li>
+          </ul>
+    </div>
+  </div>
+  <div class="main-panel">
+    <dash-nav></dash-nav>
+    <div class="content" ui-view></div>
+  </div>
+</div>

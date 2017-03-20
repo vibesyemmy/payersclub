@@ -15,12 +15,16 @@ var merge         	= require('merge-stream');
 var htmlmin         = require('gulp-htmlmin');
 var nodemon         = require('gulp-nodemon');
 var run             = require('gulp-run');
+var sass            = require('gulp-sass');
 
 // Where our files are located
 var jsFiles   			= "src/client/js/**/*.js";
-var cssFiles   			= "src/client/css/**/*.css";
+var cssFiles   			= ["src/client/css/**/*.css", "src/client/vendor/css/**/*.css"];
 var viewFiles 			= "src/client/js/**/*.html";
-var vendor          = ["src/client/vendor/js/jquery.min.js", "src/client/vendor/js/bootstrap.min.js", "src/client/vendor/js/bootstrap-wysihtml5.js"];
+var vendor          = ["src/client/vendor/js/jquery.min.js", 
+                        "src/client/vendor/js/bootstrap.min.js", 
+                        "src/client/vendor/js/bootstrap-wysihtml5.js",
+                        "src/client/vendor/js/pages.js"];
 
 var interceptErrors = function(error) {
   var args = Array.prototype.slice.call(arguments);
@@ -34,6 +38,12 @@ var interceptErrors = function(error) {
   // Keep gulp from hanging on this task
   this.emit('end');
 };
+
+gulp.task('sass', function () {
+  return gulp.src('src/client/sass/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./src/client/vendor/css'));
+});
 
 gulp.task('vendor', function(){
   var jq = gulp.src(vendor, {base: 'src/client/vendor/js/'})
@@ -53,7 +63,13 @@ gulp.task('html', function() {
     .pipe(gulp.dest('./build/'));
 });
 
-gulp.task('minify-css',['img'], function() {
+gulp.task('dashboard', function(){
+  return gulp.src("src/client/vendor/dashboard/**/*")
+        .pipe(gulp.dest('./dist/dashboard'));
+});
+
+
+gulp.task('minify-css',['dashboard','sass','img'], function() {
   return gulp.src(cssFiles)
     .pipe(cleanCSS({compatibility: 'ie8', processImport:false}))
     .pipe(rename({ suffix: '.min' }))

@@ -1,0 +1,28 @@
+<div class="card">
+	<div class="header">
+		<h4 class="title">Previous Transactions</h4>
+		<p class="category">Last 5 Transactions</p>
+	</div>
+	<div class="content table-responsive table-full-width">
+		<table class="table table-hover table-striped">
+      <thead>
+        <tr>
+        	<th>ID</th>
+        	<th>Plan</th>
+        	<th>Matched To</th>
+        	<th>Status</th>
+        	<th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="tx in $ctrl.txs">
+        	<td ng-bind="tx.objectId"></td>
+        	<td ng-bind="$ctrl.setPlan(tx.plan)"></td>
+        	<td ng-bind="tx.donor.bkaccount_name"></td>
+        	<td ng-bind="tx.confirmation_status"></td>
+        	<td><a ui-sref="dash.tx({id:tx.objectId})">View</a></td>
+        </tr>
+      </tbody>
+    </table>
+	</div>
+</div>

@@ -38,3 +38,5 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 src/client/js/config/app.templates.js
+
+src/client/vendor/bower

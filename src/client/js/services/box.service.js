@@ -9,7 +9,7 @@ class BoxService {
     this.user = User.current;
 	}
 
-	getBenex(bId) {
+	getDonors(bId) {
 		return this._$http({
 			method: "GET",
 			url: this._AppConstants.api +"/classes/Box",
@@ -21,7 +21,8 @@ class BoxService {
 						"$lt": 2
 					}
 				},
-				include: ["beneficiary", "donor"]
+				include: ["beneficiary", "donor"],
+				limit:2
 			}
 		}).then((res) =>{
 			this.benex = res.data.results;
@@ -31,7 +32,7 @@ class BoxService {
 		});
 	}
 
-	getDonors(dId) {
+	getBenex(dId) {
 		return this._$http({
 			method: "GET",
 			url: this._AppConstants.api +"/classes/Box",
@@ -43,10 +44,11 @@ class BoxService {
 						"$lt": 2
 					}
 				},
-				include: ["beneficiary", "donor"]
+				include: ["beneficiary", "donor"],
+				limit:1
 			}
 		}).then((res) =>{
-			this.donors = res.data.results;
+			this.donors = res.data.results[0];
 			return this.donors;
 		}).catch((err) =>{
 			return err;

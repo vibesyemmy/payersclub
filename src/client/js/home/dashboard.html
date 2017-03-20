@@ -9,8 +9,8 @@
   				<div class="panel-body">
   					<ul>
   						<li class="news repeated-item" ng-repeat="news in $ctrl.news | orderBy:'-createdAt'">
-                <h4 class="title" ng-bind="news.title">Lorem ipsum dolor.</h4>
-                <p ng-bind="news.excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, non?</p>
+                <h4 class="title">{{news.title}}</h4>
+                <p ng-if="news.excerpt" ng-bind="news.excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, non?</p>
                 <!-- <a ui-serf="app.news({id: news.id})">Read more</a> -->
               </li>
   					</ul>
@@ -24,11 +24,12 @@
         </div>
   			
         <div class="row">
-	  			<provide-help-card file="$ctrl.upload(file)" type=0 class="panel panel-default card col-md-4" ng-repeat="b in $ctrl.benex" box="b" ng-if="b.confirmation_status != 2"></provide-help-card>  			
+	  			<provide-help-card file="$ctrl.upload(file)" type=0 class="panel panel-default card col-md-4" box="$ctrl.benex" ng-if="$ctrl.benex && $ctrl.benex.confirmation_status < 2"></provide-help-card>  
+          <recycle-card class="panel recycle col-md-4" type=0 ng-if="!$ctrl.benex"></recycle-card>			
   			</div>
   			
         <div class="row" style="margin-top: 45px;">
-	  			<get-help-card class="panel panel-info card col-md-4" type=1 ng-repeat="b in $ctrl.donor" box="b" ng-if="d.confirmation_status != 2"></get-help-card>
+	  			<get-help-card class="panel panel-info card col-md-4" type=1 ng-repeat="b in $ctrl.donors" box="b" ng-if="$ctrl.donors && b.confirmation_status < 2"></get-help-card>
   			</div>
   		</div>
   	</div>
