@@ -2,6 +2,8 @@ var _ = require("underscore");
 
 var client = require(__dirname + '/modules/nodemailer.js');
 
+var Box = Parse.Object.extend("Box");
+
 Parse.Cloud.beforeSave("Box", (req, res) =>{
 	var box = req.object;
 	var donor = box.get("donor");
