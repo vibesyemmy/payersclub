@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 class DashCtrl{
-	constructor(benex, donors, $scope, SocketIO, UploadService, toaster, $state, Alert, User){
+	constructor(benex, donors, history, $scope, SocketIO, UploadService, toaster, $state, Alert, User, $interval, Box){
 		'ngInject';
 
 		this.benex      = benex;
@@ -15,10 +15,34 @@ class DashCtrl{
 		this.a 					= Alert;
 		this.alert 			= {};
 		this.alert.show	= false;
+		this.history 		= history;
+		this.i 					= $interval;
+		this.box 				= Box;
 		this.init();
+		this.count 			= 0;
 
-		console.log(this.benex, this.donor);
+		// console.log(this.benex, this.donor);
 
+		// $interval(this.refresh(), 20000);
+
+	}
+
+	refresh() {
+		// this.box.getDonors(this.user.objectId).then((val) =>{
+		// 	this.donors = val;
+		// 	return this.box.getBenex(this.user.objectId);
+		// }).then((val) =>{
+		// 	this.benex = val;
+		// 	return this.box.getHistory();
+		// }).then((val) =>{
+		// 	this.history = val;
+		// 	console.log(val);
+		// });
+		console.log(this.count);
+		if (this.count > 0) {
+			this.state.reload();	
+		}
+		this.count++;
 	}
 
 	closeAlert() {
@@ -40,7 +64,6 @@ class DashCtrl{
 	}
 
 	init() {
-
 		let u = {
 			id: this.user.objectId,
 			username: this.user.username
@@ -50,7 +73,16 @@ class DashCtrl{
 			this.io.emit('new_user', u);
 
 			this.io.on('global_reset', () =>{
-				window.location = "/";
+				this.box.getDonors(this.user.objectId).then((val) =>{
+					this.donors = val;
+					return this.box.getBenex(this.user.objectId);
+				}).then((val) =>{
+					this.benex = val;
+					return this.box.getHistory();
+				}).then((val) =>{
+					this.history = val;
+					console.log(val);
+				});
 			});
 
 			this.io.on('incoming_news', (news) =>{

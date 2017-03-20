@@ -9,6 +9,28 @@ class BoxService {
     this.user = User.current;
 	}
 
+	getHistory(){
+		return this._$http({
+			method: 'GET',
+			url: this._AppConstants.api +"/classes/Box",
+			headers:this.header(),
+			params:{
+				"where" :{
+					"$or" : [
+						{"donor": this.u(this.user.objectId)},
+						{"beneficiary":this.u(this.user.objectId)}
+					]
+				},
+				limit: 5,
+				include: ["beneficiary", "donor"]
+			}
+		}).then((res) =>{
+			return res.data.results;
+		}).catch((err) =>{
+			return err;
+		});
+	}
+
 	getDonors(bId) {
 		return this._$http({
 			method: "GET",
@@ -48,6 +70,7 @@ class BoxService {
 				limit:1
 			}
 		}).then((res) =>{
+			console.log(res.data.results[0]);
 			this.donors = res.data.results[0];
 			return this.donors;
 		}).catch((err) =>{

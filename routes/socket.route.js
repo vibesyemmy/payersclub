@@ -15,13 +15,22 @@ let returnRouter = (io) =>{
 	router.post('/merge',merge);
 	router.post('/confirm',confirmTx);
 
+	router.post('/box/confirm', boxConfirmationRequest);
+
 	return router;
 }
 
 module.exports = returnRouter;
 
-function confirmTx(req, res) {
+function boxConfirmationRequest(req, res) {
+	// After POP is uploaded
+	var box = req.body.box;
+	sio.sockets.emit("incoming_tx_confirmation_request", box);
+	console.log(box);
+	res.status(200).json({ message: "Tx Confirmation received" });
+}
 
+function confirmTx(req, res) {
 	sio.sockets.emit("incoming_tx_confirm", {});
 	res.status(200).json({ message: "Tx Confirmation received" });
 }

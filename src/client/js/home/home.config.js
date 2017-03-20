@@ -28,6 +28,11 @@ function HomeConfig($stateProvider) {
           return val;
         });
       },
+      history: (Box) => {
+        return Box.getHistory().then((val) =>{
+          return val;
+        });
+      },
       auth: function(User) {
         return User.verifyAuth();
       }

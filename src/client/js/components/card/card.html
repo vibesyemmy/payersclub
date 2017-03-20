@@ -20,7 +20,7 @@
 			</label>
 			
 			<!-- Handle switch in Box service via a cloud function  -->
-			<button ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 0" class="btn btn-danger" ng-click="$ctrl.decline">Decline</button>
+			<button ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 0 && $ctrl.box.donor.benefit_count == 0" class="btn btn-danger" ng-click="$ctrl.decline">Decline</button>
 			<button ng-disabled="$ctrl.box.confirmation_status === 0" ng-class="{'btn-success': $ctrl.type === 1}" ng-click="$ctrl.confirm()" ng-if="$ctrl.type === 1" class="btn">Confirm Payment</button>
 		</div>
 		<div ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 1">

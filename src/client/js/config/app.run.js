@@ -37,6 +37,7 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
       var is404       = toState.name === "app.404";
       var dash        = toState.name === "dash";
       var dashMain    = toState.name === "dash.main";
+      var dashUser    = toState.name === "dash.user";
 
       if (isLogin || isRegister || isHome || isFAQ || is404) {
         $rootScope.theme = 'site';
@@ -48,7 +49,7 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
         $state.go('app.login');
       }
 
-      if (dash || dashMain) {
+      if (dash || dashMain || dashUser) {
         $rootScope.theme = 'dash';
       } else {
         $rootScope.theme = 'site';

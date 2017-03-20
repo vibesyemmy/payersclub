@@ -29,11 +29,8 @@ class RecycleCTRL {
   }
 
   getMessage() {
-    if (this.type == 1) {
-      return "Your account has been matched to donate."
-    } else if (this.type == 2) {
-      return "Your account has been matched to receive."
-    } else if (this.type == 0) {
+    console.log("Recycler", this.b, this.d);
+    if (!this.b && this.d.length == 0) {
       return "Your account is being matched with another member. Please wait.";
     }
   }
@@ -41,7 +38,9 @@ class RecycleCTRL {
 
 let Recycle = {
 	bindings:{
-		type: '='
+		type: '=',
+    b: '=',
+    d: '='
 	},
 	controller: RecycleCTRL,
 	templateUrl : 'components/card/recycle.html'

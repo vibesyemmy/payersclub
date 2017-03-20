@@ -11,16 +11,14 @@
         	<th>Plan</th>
         	<th>Matched To</th>
         	<th>Status</th>
-        	<th>Details</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="tx in $ctrl.txs">
+        <tr ng-repeat="tx in $ctrl.history">
         	<td ng-bind="tx.objectId"></td>
-        	<td ng-bind="$ctrl.setPlan(tx.plan)"></td>
-        	<td ng-bind="tx.donor.bkaccount_name"></td>
-        	<td ng-bind="tx.confirmation_status"></td>
-        	<td><a ui-sref="dash.tx({id:tx.objectId})">View</a></td>
+        	<td>&#8358;{{$ctrl.setPlan(tx.donor.plan)}}</td>
+        	<td>{{$ctrl.getName(tx)}}</td>
+        	<td>{{$ctrl.setStatus(tx.confirmation_status)}}</td>
         </tr>
       </tbody>
     </table>

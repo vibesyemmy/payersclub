@@ -1,12 +1,13 @@
 /*jshint esversion: 6 */
 
 class PHCtrl {
-	constructor($rootScope, UploadService, Box, User){
+	constructor($rootScope, UploadService, Box, User, Alert){
 		'ngInject';
 		this.rs = $rootScope;
 		this.up = UploadService;
 		this.boxService = Box;
 		this.user = User.current;
+		this.a = Alert;
 
 		this.rs.has_donors = false;
 		this.rs.has_benex = true;
@@ -39,6 +40,15 @@ class PHCtrl {
 		}).then((res) =>{
 			this.box.confirmation_status = 1;
 			this.rs.stateLoading = false;
+			let b = {
+				boxId: this.box.objectId,
+				benexId: this.box.beneficiary.objectId,
+				donorId: this.donor.objectId,
+				status: 1
+			}
+			this.a.boxConfirm(b).then((res) =>{
+
+			});
 		});
 	}
 
