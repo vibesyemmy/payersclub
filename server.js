@@ -80,8 +80,8 @@ io.sockets.on('connection', (s) =>{
   setInterval(()=>{
     console.log("Reset clients", i);
     i++;
-    io.sockets.emit('global_reset', {});
-  },300000);
+    io.sockets.volatile.emit('global_reset', {});
+  },900000);
 
   s.on('room', (room) =>{
     console.log("Joining "+room+" room.");
