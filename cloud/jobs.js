@@ -6,6 +6,7 @@ var env = process.env.NODE_ENV || "dev";
 Parse.Cloud.job('Sanitize-Users', (req, stat) =>{
   var promises = [];
   var userQuery = new Parse.Query(Parse.User);
+  userQuery.limit(999);
   userQuery.find().then((users) => {
     _.each(users, (u) => {
       promises.push(u.save(null, {useMasterKey: true}));
@@ -264,7 +265,7 @@ Parse.Cloud.job("Match Recycler beneficiaries", (req, stat) =>{
   });
 });
 
-Parse.Cloud.job('Generic Match', (req, stat) =>{
+Parse.Cloud.job('genericMatch', (req, stat) =>{
   var plan = req.params.plan;
   var bq_limit = req.params.limit;
   var beneficiaries = [];
