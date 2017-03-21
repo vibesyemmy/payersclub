@@ -51,6 +51,10 @@ Parse.Cloud.beforeSave(Parse.User, (req, res) =>{
 		res.error("Donors cannot be in multiple boxes");
 	}
 
+	if (!user.has("hidden")) {
+		user.set("hidden", false);
+	}
+
 	res.success();
 
 });
