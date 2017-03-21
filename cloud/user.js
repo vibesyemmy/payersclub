@@ -69,6 +69,16 @@ Parse.Cloud.afterSave(Parse.User, (req, res) => {
 			return res.success(info);
 		});
 	}
+
+	if (user.get("can_recycle") && user.get("benefit_count") == 4) {
+			user.set("plan", "-1");
+			user.set("plan_pending", true);
+			user.set("plan_pending_time", new Date());
+			user.set("can_recycle", false);
+			user.set("benefit_count", 0);
+			user.set("can_benefit", false);
+			user.set("in_box_count", 0);
+		}
 });
 
 function getMailOptions(user) {

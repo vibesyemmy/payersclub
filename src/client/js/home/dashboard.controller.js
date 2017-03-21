@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 class DashCtrl{
-	constructor(benex, donors, history, $scope, SocketIO, UploadService, toaster, $state, Alert, User, $interval, Box, $uibModal, $document){
+	constructor(benex, donors, history, cu, $scope, SocketIO, UploadService, toaster, $state, Alert, User, $interval, Box, $uibModal, $document){
 		'ngInject';
 
 		this.benex      = benex;
@@ -21,12 +21,17 @@ class DashCtrl{
 		this.init();
 		this.count 			= 0;
 		this.uibModal		= $uibModal;
+		this.cu = cu;
 
 		// console.log(this.benex, this.donor);
 
 		// $interval(this.refresh(), 20000);
 
 		if (this.user.plan === '-1') {
+			this.state.go('dash.change');
+		}
+
+		if (this.cu.benefit_count == 4 && this.cu.can_recycle) {
 			this.state.go('dash.change');
 		}
 

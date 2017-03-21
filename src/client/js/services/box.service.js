@@ -105,11 +105,12 @@ class BoxService {
 				"confirmation_status": 2
 			}
 		}).then((res) =>{
-			return user(this.user.objectId);
+			return this.user(this.user.objectId);
 		}).then((user) =>{
 			plan = this.user.plan;
 			var u = user.data;
-			if (u.benefit_count === 4) {
+			if (u.benefit_count == 4) {
+				console.log
 				plan = "-1";
 			}
 			return this.updatePlan(u.objectId, plan);
@@ -120,6 +121,31 @@ class BoxService {
 			return err;
 		});
 	}
+
+	updatePlan(uid, plan){
+		var p = {
+			plan: plan,
+			benefit_count:0,
+			can_benefit: false,
+			can_recycle: false,
+			in_box: false,
+			in_box_count: 0
+		}
+		return this._$http({
+			method: 'PUT',
+			url: this._AppConstants.api + '/classes/_User/'+uid,
+			headers:this.header(),
+			data: p
+		}).then((res) =>{
+			return this.getUser(uid);
+		}).then((res) => {
+			this.user = res.data;
+			return this.user;
+		}).catch((err) =>{
+			return err;
+		});
+	}
+
 
 	getBox(id) {
 		return this._$http({
@@ -166,6 +192,18 @@ class BoxService {
 			headers:this.header()
 		}).then((res) =>{
 			return res.data;
+		}).catch((err) =>{
+			return err;
+		});
+	}
+
+	getUser(id){
+		return this._$http({
+			method: 'GET',
+			url: this._AppConstants.api +"/classes/_User/"+id,
+			headers:this.header()
+		}).then((res) =>{
+			return res;
 		}).catch((err) =>{
 			return err;
 		});

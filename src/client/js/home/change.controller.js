@@ -1,13 +1,16 @@
 class Change {
-	constructor(User, $state){
+	constructor(User, Box, $state){
 		'ngInject';
 		this.u = User;
 		this._$state = $state;
+		this.box = Box;
+		// console.log(this.u);
 	}
 
-	submit() {
-		this.u.update(this.formData).then((u) =>{
-			// this._$state.go('dash.main');
+	submit(plan) {
+		this.box.updatePlan(this.u.current.objectId, plan).then((user) =>{
+			this.u.current = user;
+			console.log(user);
 			window.location = "/";
 		});
 	}

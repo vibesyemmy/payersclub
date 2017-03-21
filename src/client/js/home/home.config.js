@@ -35,6 +35,9 @@ function HomeConfig($stateProvider) {
       },
       auth: function(User) {
         return User.verifyAuth();
+      },
+      cu: function(User) {
+        return User.currentUser();
       }
     }
   }).state('dash.main', {

@@ -107,6 +107,23 @@ class User {
     window.location = "/";
   }
 
+  verifyChange() {
+    let deferred = this._$q.defer();
+    return this._$http({
+      url: this._AppConstants.api + '/users/me?include=profile',
+      method: 'GET',
+      headers: {
+        'X-Parse-Application-Id': this._AppConstants.appId,
+        'X-Parse-Session-Token': this._Token.get()
+      }
+    }).then((res) => {
+      return res.data;
+    }).catch((err) =>{
+      return this._$state.go('dash.change');
+    });
+  }
+
+
   verifyAdmin() {
     let deferred = this._$q.defer();
 
@@ -173,6 +190,21 @@ class User {
     }
 
     return deferred.promise;
+  }
+
+  currentUser() {
+    return this._$http({
+        url: this._AppConstants.api + '/users/me?include=profile',
+        method: 'GET',
+        headers: {
+          'X-Parse-Application-Id': this._AppConstants.appId,
+          'X-Parse-Session-Token': this._Token.get()
+        }
+      }).then((res) =>{
+        return res.data;
+      }).catch((err) =>{
+        return err;
+      })
   }
 
 

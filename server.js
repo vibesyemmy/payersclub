@@ -81,7 +81,7 @@ io.sockets.on('connection', (s) =>{
     console.log("Reset clients", i);
     i++;
     io.sockets.emit('global_reset', {});
-  },600000);
+  },300000);
 
   s.on('room', (room) =>{
     console.log("Joining "+room+" room.");

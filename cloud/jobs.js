@@ -253,13 +253,13 @@ Parse.Cloud.job('doPairLoop10k', (req, stat) =>{
   });
 });
 
-Parse.Cloud.job("Match Recycler beneficiaries", (req, stat) =>{
+Parse.Cloud.job("job", (req, stat) =>{
+  var plan = req.params.plan;
   var rQ = new Parse.Query(Parse.User);
-  rQ.equalTo("benefit_count", 2);
-  rQ.equalTo("in_box_count", 0);
+  rQ.equalTo("plan", plan)
   rQ.find().then((users) => {
     for (var i = 0; i < users.length; i++) {
-      console.log(users[i].get("username"),users.length);
+      console.log("From job - ",users[i].get("username"),users.length);
     }
     return stat.success();
   });
@@ -267,7 +267,6 @@ Parse.Cloud.job("Match Recycler beneficiaries", (req, stat) =>{
 
 Parse.Cloud.job('genericMatch', (req, stat) =>{
   var plan = req.params.plan;
-  var bq_limit = req.params.limit;
   var beneficiaries = [];
   var donors = [];
   var dc = 0;
@@ -277,8 +276,8 @@ Parse.Cloud.job('genericMatch', (req, stat) =>{
 
   // Beneficiary query
   var bq = new Parse.Query(Parse.User);
-  bq.lessThanOrEqualTo("benefit_count", 2);
-  bq.lessThan("in_box_count", 2);
+  bq.equalTo("benefit_count", 0);
+  bq.lessThanOrEqualTo("in_box_count", 1);
   bq.equalTo("plan_pending", false);
   bq.equalTo("can_benefit", true);
   bq.descending("createdAt");
@@ -289,15 +288,27 @@ Parse.Cloud.job('genericMatch', (req, stat) =>{
   dq.equalTo("plan_pending", false);
   dq.equalTo("can_benefit", false);
   dq.equalTo("in_box_count", 0);
+  dq.equalTo("benefit_count", 0);
   dq.descending("createdAt");
   dq.equalTo("plan", plan);
+
+  // Recycler query
+  var rq = new Parse.Query(Parse.User);
+  rq.equalTo("benefit_count", 2);
+  rq.equalTo("can_benefit", true);
+  rq.equalTo("plan_pending", false);
+  rq.equalTo("in_box_count", 0);
+  rq.equalTo("plan", plan);
 
   bq.find().then((users) =>{
     beneficiaries = users;
     var donor_count = beneficiaries.length * 2;
-    dq.limit(donor_count);
-    dq.descending("createdAt");
-    return dq.find();
+
+    var mainQ = Parse.Query.or(dq, rq);
+
+    mainQ.limit(donor_count);
+    mainQ.descending("updatedAt");
+    return mainQ.find();
   }).then((dq) =>{
     donors = dq;
 
@@ -318,36 +329,40 @@ Parse.Cloud.job('genericMatch', (req, stat) =>{
     // Benex 3 hours
     // Check with cron job hourly  
     var c = 0;
-    var i = 0;
-    var promise = Parse.Promise.as();
+    var c2 = 0;
     
     console.log("Got here, ", beneficiaries.length);
-    _.each(beneficiaries, (beneficiary) =>{
-      var benex = beneficiary;
-      var donor = donors[c];
-      promise = promise.then(() =>{
-        console.log("Got here, Donor 1: "+benex.get("username")+" "+donor.get("username"));
-        var box = new Box();
-        box.set("beneficiary", benex);
-        box.set("donor", donor);
-        box.set("confirmation_status", 0);
-        box.set("timer_status", 0);
 
-        return box.save().then((b) =>{
-          c++;
-          donor = donors[c];
-          console.log("Got here, Donor 2: "+benex.get("username")+" "+donor.get("username"));
-          var box = new Box();
-          box.set("beneficiary", benex);
-          box.set("donor", donor);
-          box.set("confirmation_status", 0);
-          box.set("timer_status", 0);
-          return box.save();
-        });
-      });
-    });
+    for (var i = 0; i < beneficiaries.length; i++) {
+      c2 = c + 1;
+      var d1, d2;
+      var b1, b2;
+      var benex = beneficiaries[i];
+      d1 = donors[c];
+      d2 = donors[c2];
+      
+      b1 = new Box();
+      b1.set("beneficiary", benex);
+      b1.set("donor", d1);
+      b1.set("confirmation_status", 0);
+      b1.set("timer_status", 0);
 
-    return promise;
+      b2 = new Box();
+      b2.set("beneficiary", benex);
+      b2.set("donor", d2);
+      b2.set("confirmation_status", 0);
+      b2.set("timer_status", 0);
+      console.log(i +" - "+c+" - "+c2);
+      c = c + 2;
+      promises.push(b1.save());
+      promises.push(b2.save());
+
+      if (!c2) {
+        return stat.error();
+      }
+    }
+
+    return Parse.Promise.when(promises);
   }).then(() =>{
     return stat.success();
   }).catch((err) =>{

@@ -55,15 +55,7 @@ Parse.Cloud.afterSave("Box", (req, res) =>{
 			// 	donor.increment("benefit_count");
 			// } 
 
-			if (donor.get("benefit_count") == 4) {
-				donor.set("plan", "-1");
-				donor.set("plan_pending", true);
-				donor.set("plan_pending_time", new Date());
-				donor.set("can_recycle", false);
-				donor.set("benefit_count", 0);
-				donor.set("can_benefit", false);
-				donor.set("in_box_count", 0);
-			}
+			
 		}
 		// Break box
 		if (box.get("confirmation_status") == 3) {
@@ -80,6 +72,24 @@ Parse.Cloud.afterSave("Box", (req, res) =>{
 
 		return Parse.Promise.when(promises);
 	}).then(() =>{
+		var b = box.get("beneficiary");
+		var bQ = new Parse.Query(Parse.User);
+		bQ.equalTo("objectId", b.id);
+		return b.first();
+	}).then((b) =>{
+		if (box.get("confirmation_status") == 2) {
+			if (b.get("benefit_count") == 4) {
+				b.set("plan", "-1");
+				b.set("plan_pending", true);
+				b.set("plan_pending_time", new Date());
+				b.set("can_recycle", false);
+				b.set("benefit_count", 0);
+				b.set("can_benefit", false);
+				b.set("in_box_count", 0);
+			}
+		}
+		return b.save(null, {useMasterKey:true});
+	}).then((u) =>{
 		return res.success();
 	}).catch((err) =>{
 		return res.error(err);
