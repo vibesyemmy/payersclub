@@ -30,14 +30,15 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
 
   $rootScope.$on('$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) {
       $rootScope.stateLoading = true;
-      var isLogin     = toState.name === "app.login";
-      var isRegister  = toState.name === "app.register";
-      var isHome      = toState.name === "app.home";
-      var isFAQ       = toState.name === "app.faq";
-      var is404       = toState.name === "app.404";
-      var dash        = toState.name === "dash";
-      var dashMain    = toState.name === "dash.main";
-      var dashUser    = toState.name === "dash.user";
+      var isLogin       = toState.name === "app.login";
+      var isRegister    = toState.name === "app.register";
+      var isHome        = toState.name === "app.home";
+      var isFAQ         = toState.name === "app.faq";
+      var is404         = toState.name === "app.404";
+      var dash          = toState.name === "dash";
+      var dashMain      = toState.name === "dash.main";
+      var dashUser      = toState.name === "dash.user";
+      var UserChange    = toState.name === "dash.change";
 
       if (isLogin || isRegister || isHome || isFAQ || is404) {
         $rootScope.theme = 'site';
@@ -49,7 +50,7 @@ function AppRun(AppConstants, $rootScope, Token, User, $state, $window) {
         $state.go('app.login');
       }
 
-      if (dash || dashMain || dashUser) {
+      if (dash || dashMain || dashUser || UserChange) {
         $rootScope.theme = 'dash';
       } else {
         $rootScope.theme = 'site';

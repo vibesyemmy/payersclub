@@ -54,6 +54,7 @@ class PHCtrl {
 
 	decline() {
 		this.boxService.decline(this.box.objectId).then((res) =>{
+			this.user.plan = "-1";
 			window.location = "/";
 		});
 	}

@@ -1,14 +1,16 @@
 class Change {
-	constructor(User){
+	constructor(User, $state){
 		'ngInject';
 		this.u = User;
+		this._$state = $state;
 	}
 
 	submit() {
 		this.u.update(this.formData).then((u) =>{
-			this._$state.go('app.home')
+			// this._$state.go('dash.main');
+			window.location = "/";
 		});
 	}
 }
 
-export default change;
+export default Change;

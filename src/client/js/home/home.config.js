@@ -47,7 +47,7 @@ function HomeConfig($stateProvider) {
   }).state('app.faq',{
     url: '/faq',
     templateUrl: 'home/faq.html'
-  }).state('app.change',{
+  }).state('dash.change',{
     url: '/change',
     controller: 'ChangePlan',
     controllerAs: '$ctrl',

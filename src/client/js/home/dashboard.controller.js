@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 class DashCtrl{
-	constructor(benex, donors, history, $scope, SocketIO, UploadService, toaster, $state, Alert, User, $interval, Box){
+	constructor(benex, donors, history, $scope, SocketIO, UploadService, toaster, $state, Alert, User, $interval, Box, $uibModal, $document){
 		'ngInject';
 
 		this.benex      = benex;
@@ -20,10 +20,15 @@ class DashCtrl{
 		this.box 				= Box;
 		this.init();
 		this.count 			= 0;
+		this.uibModal		= $uibModal;
 
 		// console.log(this.benex, this.donor);
 
 		// $interval(this.refresh(), 20000);
+
+		if (this.user.plan === '-1') {
+			this.state.go('dash.change');
+		}
 
 	}
 
@@ -66,8 +71,11 @@ class DashCtrl{
 	init() {
 		let u = {
 			id: this.user.objectId,
-			username: this.user.username
+			username: this.user.username,
+			plan: this.user.plan
 		};
+
+		console.log(u);
 
 		this.io.on('connect', (s)=> {
 			this.io.emit('new_user', u);
@@ -81,7 +89,6 @@ class DashCtrl{
 					return this.box.getHistory();
 				}).then((val) =>{
 					this.history = val;
-					console.log(val);
 				});
 			});
 

@@ -7,6 +7,7 @@ import 'angular-socket-io';
 import 'angular-animate';
 import 'angularjs-toaster';
 import 'angular-web-notification';
+import 'angular-modal-service';
 
 // Import our app config files
 import constants  from './config/app.constants';
@@ -33,6 +34,7 @@ const requires = [
   'ngAnimate',
   'toaster',
   'smart-table',
+  'angularModalService',
   'templates',
   'app.services',
   'app.layout',

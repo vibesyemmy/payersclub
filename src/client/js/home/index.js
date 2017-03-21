@@ -18,5 +18,8 @@ homeModule.controller('DashCtrl', DashCtrl);
 import ProfileCtrl from './profile.controller';
 homeModule.controller('ProfileCtrl', ProfileCtrl);
 
+import ChangePlan from './change.controller';
+homeModule.controller('ChangePlan', ChangePlan);
+
 
 export default homeModule;

@@ -29,8 +29,6 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-  
-  <base href="/">
 
 </head>
 <body id="page-top" override>
@@ -39,35 +37,7 @@
 	<div class="page-loader" ng-show="stateLoading">
     <div class="loader">Loading...</div>
   </div>
-  <script src="/socket.io/socket.io.js"></script>
-	<script src="/main.js"></script>
-  <script src="/dashboard/js/bootstrap-notify.js"></script>
-  <script ng-src="/dashboard/js/light-bootstrap-dashboard.js"></script>
-  <script type="text/javascript">
-      $(document).ready(function(){
-
-          $.notify({
-              icon: 'pe-7s-gift',
-              message: "Welcome to <b>FXChange Club</b>. Remember to only donate your spare money."
-
-            },{
-                type: 'danger',
-                timer: 36000
-            });
-
-      });
-  </script>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-93748956-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  <div class="collapse navbar-collapse" data-color="orange">
+  <div ng-if="theme === 'dash'" class="collapse navbar-collapse" data-color="orange">
     <div class="logo"></div>
     <ul class="nav">
       <li ui-sref-active="active">
@@ -94,14 +64,35 @@
           <p>News</p>
         </a>
       </li>
-      <li ui-sref-active="active">
-        <a href="notifications.html">
-          <i class="pe-7s-bell"></i>
-          <p>Notifications</p>
-        </a>
-      </li>
-      <li><logout></logout></li>
     </ul>
   </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/main.js"></script>
+  <script src="/dashboard/js/bootstrap-notify.js"></script>
+  <script ng-src="/dashboard/js/light-bootstrap-dashboard.js"></script>
+  <script type="text/javascript">
+      $(document).ready(function(){
+
+          $.notify({
+              icon: 'pe-7s-gift',
+              message: "Welcome to <b>FXChange Club</b>. Remember to only donate your spare money."
+
+            },{
+                type: 'danger',
+                timer: 36000
+            });
+
+      });
+  </script>
+  <script ng-if="theme === 'dash'">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-93748956-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
 </body>
 </html>

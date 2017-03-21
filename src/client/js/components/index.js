@@ -50,4 +50,7 @@ componentsModule.component('logout', Logout);
 import Hambuger from './hambuger.directive';
 componentsModule.directive('hambuger', Hambuger);
 
+import PlanBlock from './plan-block.component';
+componentsModule.directive('planBlock', PlanBlock);
+
 export default componentsModule;

@@ -30,7 +30,6 @@ class GHCtrl {
 	confirm(){
 		this.boxService.confirmTx(this.box.objectId).then((res) =>{
 			this.box.confirmation_status = 2;
-			
 		});
 	}
 

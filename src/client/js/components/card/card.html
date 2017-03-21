@@ -1,7 +1,14 @@
 <div class="card">
 	<div class="header">
-		<span ng-if="$ctrl.type === 0">Outgoing Funds</span>
-		<span ng-if="$ctrl.type === 1">Incoming Funds</span>
+		<div ng-if="$ctrl.box.donor.benefit_count == 0">
+			<span ng-if="$ctrl.type === 0">Outgoing Funds</span>
+			<span ng-if="$ctrl.type === 1">Incoming Funds</span>
+		</div>
+		<div ng-if="$ctrl.box.donor.benefit_count == 2">
+			<div class="category">
+        <h6 class="label label-warning">Recycle</h6>    
+      </div>
+		</div>
 		<a><span class="pull-right"><i class="fa fa-comment"></i></span></a>
 	</div>
 	<div class="content">

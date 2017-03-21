@@ -7,7 +7,7 @@ var Box = Parse.Object.extend("Box");
 Parse.Cloud.beforeSave("Box", (req, res) =>{
 	var box = req.object;
 	var donor = box.get("donor");
-	var in_box_count = donor.get("in_box_count");
+	// var in_box_count = donor.get("in_box_count");
 	if (!box.get("beneficiary") || !box.get("donor") ) {
 		res.error("Can't save box without a beneficiary or donor");
 	}
@@ -19,7 +19,6 @@ Parse.Cloud.afterSave("Box", (req, res) =>{
 	var promises = [];
 	var benex = box.get("beneficiary");
 	var donor = box.get("donor");
-
 	if (!box.existed()) {
 		benex.set("in_box", true);
 		donor.set("in_box", true);
@@ -30,24 +29,44 @@ Parse.Cloud.afterSave("Box", (req, res) =>{
 		return Parse.Promise.when(promises);
 	}
 
-	if (box.get("confirmation_status") == 2) {
-		benex.increment("benefit_count");
-		benex.set("in_box", false);
-		donor.set("in_box", false);
-		benex.increment("in_box_count", -1);
-		donor.increment("in_box_count", -1);
-		
-		if (!donor.get("can_benefit")) {
-			donor.set("can_benefit", true);
-		} 
 
-		// Recycling
+	var dQ = new Parse.Query(Parse.User);
+	dQ.equalTo("objectId", donor.id);
+	dQ.first((donor) =>{
+		if (box.get("confirmation_status") == 2) {
+			benex.increment("benefit_count");
+			benex.set("in_box", false);
+			donor.set("in_box", false);
+			benex.increment("in_box_count", -1);
+			donor.increment("in_box_count", -1);
+			console.log(donor.get("benefit_count"));
+			console.log("BBBBBB",donor.get("benefit_count"));
+			if (donor.get("benefit_count") == 2) {
+				donor.set("can_recycle", true);
+			}
+			
+			if (!donor.get("can_benefit")) {
+				donor.set("can_benefit", true);
+			} 
 
-		if (donor.get("can_benefit") && donor.get("benefit_count") < 4) {
-			donor.increment("benefit_count");
-		} 
+			// Recycling
 
-		if (donor.get("benefit_count") == 4) {
+			// if (donor.get("can_benefit") && donor.get("benefit_count") < 4) {
+			// 	donor.increment("benefit_count");
+			// } 
+
+			if (donor.get("benefit_count") == 4) {
+				donor.set("plan", "-1");
+				donor.set("plan_pending", true);
+				donor.set("plan_pending_time", new Date());
+				donor.set("can_recycle", false);
+				donor.set("benefit_count", 0);
+				donor.set("can_benefit", false);
+				donor.set("in_box_count", 0);
+			}
+		}
+		// Break box
+		if (box.get("confirmation_status") == 3) {
 			donor.set("plan", "-1");
 			donor.set("plan_pending", true);
 			donor.set("plan_pending_time", new Date());
@@ -56,22 +75,11 @@ Parse.Cloud.afterSave("Box", (req, res) =>{
 			donor.set("can_benefit", false);
 			donor.set("in_box_count", 0);
 		}
-	}
+		promises.push(benex.save(null, {useMasterKey:true}));
+		promises.push(donor.save(null, {useMasterKey:true}));
 
-	// Break box
-	if (box.get("confirmation_status") == 3) {
-		donor.set("plan", "-1");
-		donor.set("plan_pending", true);
-		donor.set("plan_pending_time", new Date());
-		donor.set("can_recycle", false);
-		donor.set("benefit_count", 0);
-		donor.set("can_benefit", false);
-		donor.set("in_box_count", 0);
-	}
-	promises.push(benex.save(null, {useMasterKey:true}));
-	promises.push(donor.save(null, {useMasterKey:true}));
-
-	return Parse.Promise.when(promises).then(() =>{
+		return Parse.Promise.when(promises);
+	}).then(() =>{
 		return res.success();
 	}).catch((err) =>{
 		return res.error(err);
@@ -92,24 +100,28 @@ Parse.Cloud.define('decline', (req, res) =>{
 		box.set("confirmation_status", 3);
 		return box.save();
 	}).then(() =>{
-		// New donor query
-		var dq = new Parse.Query(Parse.User);
-		dq.equalTo("plan", benex.get("plan"));
-		dq.equalTo("plan_pending", false);
-		dq.equalTo("in_box_count", 0);
-		dq.descending("createdAt");
+		// Donor query
+	  var dq = new Parse.Query(Parse.User);
+	  dq.equalTo("plan_pending", false);
+	  dq.equalTo("can_benefit", false);
+	  dq.equalTo("in_box_count", 0);
+	  dq.equalTo("benefit_count", 0);
+	  dq.descending("createdAt");
+	  dq.equalTo("plan", "1");
 
-		var rq = new Parse.Query(Parse.User);
-		rq.equalTo("plan", benex.get("plan"));
-		rq.equalTo("plan_pending", false);
-		rq.equalTo("in_box_count", 0);
-		rq.greaterThanOrEqualTo("benefit_count", 2);
-		rq.notEqualTo("benefit_count", 4);
-
-		var mainQ = Parse.Query.or(dq, rq);
-		mainQ.descending("createdAt");
+	  // Recycler query
+	  var rq = new Parse.Query(Parse.User);
+	  rq.equalTo("benefit_count", 2);
+	  rq.equalTo("can_benefit", true);
+	  rq.equalTo("plan_pending", false);
+	  rq.equalTo("in_box_count", 0);
+	  var mainQ = Parse.Query.or(dq, rq);
+    mainQ.descending("createdAt");
 		return mainQ.first();
 	}).then((d) =>{
+		if (!d) {
+			return res.error("No donor!");
+		}
 		var donor = d;
 		var box = new Box();
 		box.set("beneficiary", benex);

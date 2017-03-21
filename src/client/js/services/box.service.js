@@ -96,6 +96,7 @@ class BoxService {
 	}
 
 	confirmTx(id) {
+		var plan;
 		return this._$http({
 			method: 'PUT',
 			url: this._AppConstants.api +"/classes/Box/"+id,
@@ -104,6 +105,16 @@ class BoxService {
 				"confirmation_status": 2
 			}
 		}).then((res) =>{
+			return user(this.user.objectId);
+		}).then((user) =>{
+			plan = this.user.plan;
+			var u = user.data;
+			if (u.benefit_count === 4) {
+				plan = "-1";
+			}
+			return this.updatePlan(u.objectId, plan);
+		}).then((res) =>{
+			this.user.plan = plan;
 			return res.data;
 		}).catch((err) =>{
 			return err;
@@ -147,6 +158,17 @@ class BoxService {
       "className": "_User",
       "objectId": id
 		};
+	}
+	user(id){
+		return this._$http({
+			method: 'GET',
+			url: this._AppConstants.api +"/classes/_User/"+id,
+			headers:this.header()
+		}).then((res) =>{
+			return res.data;
+		}).catch((err) =>{
+			return err;
+		});
 	}
 }
 
