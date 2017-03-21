@@ -15,7 +15,6 @@ var merge         	= require('merge-stream');
 var htmlmin         = require('gulp-htmlmin');
 var nodemon         = require('gulp-nodemon');
 var run             = require('gulp-run');
-var sass            = require('gulp-sass');
 
 // Where our files are located
 var jsFiles   			= "src/client/js/**/*.js";
@@ -38,12 +37,6 @@ var interceptErrors = function(error) {
   // Keep gulp from hanging on this task
   this.emit('end');
 };
-
-gulp.task('sass', function () {
-  return gulp.src('src/client/sass/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./src/client/vendor/css'));
-});
 
 gulp.task('vendor', function(){
   var jq = gulp.src(vendor, {base: 'src/client/vendor/js/'})
@@ -69,7 +62,7 @@ gulp.task('dashboard', function(){
 });
 
 
-gulp.task('minify-css',['dashboard','sass','img'], function() {
+gulp.task('minify-css',['dashboard','img'], function() {
   return gulp.src(cssFiles)
     .pipe(cleanCSS({compatibility: 'ie8', processImport:false}))
     .pipe(rename({ suffix: '.min' }))
