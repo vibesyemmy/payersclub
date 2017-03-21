@@ -118,6 +118,7 @@ Parse.Cloud.define('decline', (req, res) =>{
 	  dq.equalTo("benefit_count", 0);
 	  dq.descending("createdAt");
 	  dq.equalTo("plan", "1");
+	  dq.equalTo("hidden", false);
 
 	  // Recycler query
 	  var rq = new Parse.Query(Parse.User);
@@ -125,6 +126,7 @@ Parse.Cloud.define('decline', (req, res) =>{
 	  rq.equalTo("can_benefit", true);
 	  rq.equalTo("plan_pending", false);
 	  rq.equalTo("in_box_count", 0);
+	  rq.equalTo("hidden", false);
 	  var mainQ = Parse.Query.or(dq, rq);
     mainQ.descending("createdAt");
 		return mainQ.first();
