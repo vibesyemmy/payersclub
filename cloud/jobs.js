@@ -62,6 +62,7 @@ Parse.Cloud.job('Recycler', (req, stat) =>{
   r.equalTo("can_benefit", true);
   r.descending("createdAt");
   r.equalTo("plan", "1");
+  r.equalTo("hidden", false);
 
   // Donor query
   var dq = new Parse.Query(Parse.User);
@@ -71,6 +72,7 @@ Parse.Cloud.job('Recycler', (req, stat) =>{
   dq.equalTo("benefit_count", 0);
   dq.descending("createdAt");
   dq.equalTo("plan", "1");
+  dq.equalTo("hidden", false);
 
   // Recycler query
   var rq = new Parse.Query(Parse.User);
@@ -79,6 +81,7 @@ Parse.Cloud.job('Recycler', (req, stat) =>{
   rq.equalTo("plan_pending", false);
   rq.equalTo("can_recycle", false);
   rq.equalTo("in_box_count", 0);
+  rq.equalTo("hidden", false);
 
   r.find().then((users) =>{
     beneficiaries = users;
@@ -166,6 +169,7 @@ Parse.Cloud.job('doPairLoop10k', (req, stat) =>{
   bq.equalTo("can_benefit", true);
   bq.descending("createdAt");
   bq.equalTo("plan", "1");
+  bq.equalTo("hidden", false);
 
   // Donor query
   var dq = new Parse.Query(Parse.User);
@@ -175,6 +179,7 @@ Parse.Cloud.job('doPairLoop10k', (req, stat) =>{
   dq.equalTo("benefit_count", 0);
   dq.descending("createdAt");
   dq.equalTo("plan", "1");
+  dq.equalTo("hidden", false);
 
   // Recycler query
   var rq = new Parse.Query(Parse.User);
@@ -182,6 +187,7 @@ Parse.Cloud.job('doPairLoop10k', (req, stat) =>{
   rq.equalTo("can_benefit", true);
   rq.equalTo("plan_pending", false);
   rq.equalTo("in_box_count", 0);
+  rq.equalTo("hidden", false);
 
   bq.find().then((users) =>{
     beneficiaries = users;
@@ -282,6 +288,7 @@ Parse.Cloud.job('genericMatch', (req, stat) =>{
   bq.equalTo("can_benefit", true);
   bq.descending("createdAt");
   bq.equalTo("plan", plan);
+  bq.equalTo("hidden", false);
 
   // Donor query
   var dq = new Parse.Query(Parse.User);
@@ -291,6 +298,7 @@ Parse.Cloud.job('genericMatch', (req, stat) =>{
   dq.equalTo("benefit_count", 0);
   dq.descending("createdAt");
   dq.equalTo("plan", plan);
+  dq.equalTo("hidden", false);
 
   // Recycler query
   var rq = new Parse.Query(Parse.User);
@@ -299,6 +307,7 @@ Parse.Cloud.job('genericMatch', (req, stat) =>{
   rq.equalTo("plan_pending", false);
   rq.equalTo("in_box_count", 0);
   rq.equalTo("plan", plan);
+  rq.equalTo("hidden", false);
 
   bq.find().then((users) =>{
     beneficiaries = users;
