@@ -84,7 +84,6 @@ class BoxService {
 			url: this._AppConstants.api +"/classes/Box/"+id,
 			headers:this.header(),
 			data: {
-				"pop": file,
 				"confirmation_status": 1,
 				"timer_status": 1
 			}

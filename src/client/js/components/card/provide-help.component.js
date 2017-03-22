@@ -28,16 +28,8 @@ class PHCtrl {
 	}
 
 	upload(){
-		var file = this.myFile;
 		this.rs.stateLoading = true;
-		this.up.init(file).then((file) =>{
-			var f = {
-        "__type" : "File",
-        "name"   : file.name,
-        "url"    : file.url
-      };
-      return this.boxService.updatePop(this.box.objectId, f);
-		}).then((res) =>{
+		this.boxService.updatePop(this.box.objectId).then((file) =>{
 			this.box.confirmation_status = 1;
 			this.rs.stateLoading = false;
 			let b = {
@@ -46,9 +38,9 @@ class PHCtrl {
 				donorId: this.donor.objectId,
 				status: 1
 			}
-			this.a.boxConfirm(b).then((res) =>{
-
-			});
+      return this.a.boxConfirm(b);
+		}).then((res) =>{
+			window.location = "/";
 		});
 	}
 

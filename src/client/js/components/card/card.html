@@ -22,9 +22,7 @@
 		<p ng-if="$ctrl.type === 1"><i class="fa fa-phone"></i> {{$ctrl.box.donor.phone}}</p>
 		
 		<div class="footer">
-			<label uib-popover="Confirm donation and upload proof of payment" popover-placement="right" popover-trigger="'mouseenter'" ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 0" class="btn btn-warning btn-file">
-				Made Payment  <file accept=".png,.jpg" ng-model="$ctrl.myFile" ng-change="$ctrl.upload()" type="file" style="display: none;">
-			</label>
+			<button uib-popover="Confirm donation and upload proof of payment" popover-placement="right" popover-trigger="'mouseenter'" ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 0" class="btn btn-warning btn-file" ng-click="$ctrl.upload()">Made Payment</button>
 			
 			<!-- Handle switch in Box service via a cloud function  -->
 			<button ng-if="$ctrl.type === 0 && $ctrl.box.confirmation_status === 0 && $ctrl.box.donor.benefit_count == 0" class="btn btn-danger" ng-click="$ctrl.decline()">Decline</button>

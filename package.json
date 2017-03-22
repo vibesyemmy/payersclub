@@ -22,6 +22,7 @@
     "gravatar": "^1.6.0",
     "handlebars": "^4.0.6",
     "install": "^0.8.7",
+    "moment": "^2.18.1",
     "nodemailer": "^3.1.5",
     "nodemailer-mailgun-transport": "git+https://github.com/orliesaurus/nodemailer-mailgun-transport.git",
     "npm": "^4.4.1",

@@ -1,7 +1,49 @@
 /*jshint esversion: 6 */
 var _ = require("underscore");
 var r = require('../service/service-helper.js');
+var moment = require('moment');
 var env = process.env.NODE_ENV || "dev";
+
+// Loop through benx 
+// Confirmation Status
+// 0 = unconfirmed
+// 1 = has proof of payment
+// 2 = transaction complete
+// 3 = Box discarded
+
+// Timer Status
+// 
+// 0 = Donor timer
+// 1 = Benex timer
+// 
+// Max time for whole transaction 5 hours
+// Donor 2 hours
+// Benex 3 hours
+// Check with cron job hourly  
+
+const lessThanHour = (date, n) =>{
+  return moment(date).isAfter(moment().subtract(n, 'hour'));
+}
+
+Parse.Cloud.job('purge', (req, stat) =>{
+  var promises = [];
+  var pages = [];
+
+  var boxQ = new Parse.Query("Box");
+  boxQ.limit(999);
+  boxQ.find().then((boxes) =>{
+    _.each(boxes, (box) =>{
+      if (box.get("confirmation_status") == 3) {
+        promises.push(box.destroy());
+      }
+      if (!lessThanHour(box.get("createdAt"), 3) && box.get("timer_status") == 0 && box.get("confirmation_status") != 2) {
+        promises.push(box.destroy());
+        console.log(lessThanHour(box.get("createdAt"), 3));
+      }
+    });
+
+  })
+})
 
 Parse.Cloud.job('Sanitize-Users', (req, stat) =>{
   var promises = [];
@@ -94,23 +136,6 @@ Parse.Cloud.job('Recycler', (req, stat) =>{
     return mainQ.find();
   }).then((dq) =>{
     donors = dq;
-
-    // Loop through benx 
-    // Confirmation Status
-    // 0 = unconfirmed
-    // 1 = has proof of payment
-    // 2 = transaction complete
-    // 3 = Box discarded
-
-    // Timer Status
-    // 
-    // 0 = Donor timer
-    // 1 = Benex timer
-    // 
-    // Max time for whole transaction 5 hours
-    // Donor 2 hours
-    // Benex 3 hours
-    // Check with cron job hourly  
     var c = 0;
     var c2 = 0;
     
